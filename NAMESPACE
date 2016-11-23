@@ -1,0 +1,7 @@
+useDynLib("stable")
+
+import(rmutil)
+
+export(dstable,pstable,qstable,rstable,hstable,
+stablereg,fitted.stable,df.residual.stable,aic,aic.stable,deviance.stable,print.stable,stable.mode,
+loc.g,loc.h,disp.g,disp.h,skew.g,skew.h,tail.g,tail.h)
