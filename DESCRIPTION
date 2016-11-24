@@ -1,11 +1,15 @@
 Package: stable
 Version: 1.0
-Title: Probability Functions and Generalized Regression Models for Stable Distributions
+Title: Probability Functions and Generalized Regression Models for Stable
+    Distributions
 Author: Philippe Lambert and Jim Lindsey <jlindsey@gen.unimaas.nl>
-Maintainer:  Jim Lindsey <jlindsey@gen.unimaas.nl>
-Depends: R (>= 1.4), rmutil
-Description: Density, distribution, quantile and hazard functions of a 
-	stable variate; generalized regression models for the parameters
-	of a stable distribution.
+Maintainer: Jim Lindsey <jlindsey@gen.unimaas.nl>
+Depends:
+    R (>= 1.4),
+    rmutil
+Description: Density, distribution, quantile and hazard functions of a
+    stable variate; generalized regression models for the parameters
+    of a stable distribution.
 License: GPL version 2 or later
 URL: popgen.unimaas.nl/~jlindsey/rcode.html
+RoxygenNote: 5.0.1
