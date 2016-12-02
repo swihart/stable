@@ -1,5 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit README.Rmd -->
+[![Travis-CI Build Status](https://travis-ci.org/swihart/stable.svg?branch=master)](https://travis-ci.org/swihart/stable) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/stable)](https://cran.r-project.org/package=stable) ![downloads](http://cranlogs.r-pkg.org/badges/grand-total/stable)
+
 `stable` R package
 ==================
 
