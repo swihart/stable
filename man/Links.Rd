@@ -2,31 +2,31 @@
 % Please edit documentation in R/stable.r
 \name{Links}
 \alias{Links}
-\alias{disp.g}
-\alias{disp.h}
-\alias{loc.g}
-\alias{loc.h}
-\alias{skew.g}
-\alias{skew.h}
-\alias{tail.g}
-\alias{tail.h}
+\alias{disp_g}
+\alias{disp_h}
+\alias{loc_g}
+\alias{loc_h}
+\alias{skew_g}
+\alias{skew_h}
+\alias{tail_g}
+\alias{tail_h}
 \title{Links}
 \usage{
-loc.g(x)
+loc_g(x)
 
-loc.h(x)
+loc_h(x)
 
-disp.g(x)
+disp_g(x)
 
-disp.h(x)
+disp_h(x)
 
-skew.g(x)
+skew_g(x)
 
-skew.h(x)
+skew_h(x)
 
-tail.g(x)
+tail_g(x)
 
-tail.h(x)
+tail_h(x)
 }
 \arguments{
 \item{x}{the function argument}

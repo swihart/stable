@@ -11,8 +11,8 @@
 stablereg(y = NULL, loc = 0, disp = 1, skew = 0, tail = 1.5,
   oloc = TRUE, odisp = TRUE, oskew = TRUE, otail = TRUE,
   noopt = FALSE, iloc = NULL, idisp = NULL, iskew = NULL,
-  itail = NULL, loc.h = NULL, disp.h = NULL, skew.h = NULL,
-  tail.h = NULL, weights = 1, exact = FALSE, delta = 1,
+  itail = NULL, loc_h = NULL, disp_h = NULL, skew_h = NULL,
+  tail_h = NULL, weights = 1, exact = FALSE, delta = 1,
   envir = parent.frame(), integration = "Romberg", eps = 1e-06, up = 10,
   npoint = 501, hessian = TRUE, llik.output = FALSE, print.level = 0,
   ndigit = 10, steptol = 1e-05, gradtol = 1e-05, fscale = 1,
@@ -27,17 +27,17 @@ used here.
 For censored data, two columns with the second being the censoring indicator
 (1: uncensored, 0: right censored, -1: left censored.)}
 
-\item{loc, loc.h, oloc, iloc}{Describe the regression model fitted for the
+\item{loc, loc_h, oloc, iloc}{Describe the regression model fitted for the
 location parameter of the stable distribution, perhaps after transformation
-by the link function \code{loc.g} (set to the identity by default. The
-inverse link function is denoted by \code{loc.h}. Note that these functions
+by the link function \code{loc_g} (set to the identity by default. The
+inverse link function is denoted by \code{loc_h}. Note that these functions
 cannot contain unknown parameters).
 
 Two specifications are possible:
 
 (1) \code{loc} is a linear or nonlinear language expression beginning with ~
 or an R function, describing the regression function for the location
-parameter (after transformation by \code{loc.g}, the link function).
+parameter (after transformation by \code{loc_g}, the link function).
 
 \code{iloc} is a vector of initial conditions for the parameters in the
 regression for this parameter.
@@ -55,7 +55,7 @@ considered).
 
 If \code{oloc} is set to TRUE, i.e. when an optimization of the likelihood
 has to be carried out on the location parameter, then the location parameter
-(after transformation by the link function loc.g) is set to an unknown
+(after transformation by the link function loc_g) is set to an unknown
 parameter with initial value equal to \code{iloc[1]} or \code{loc[1]} when
 \code{iloc} is not specified.
 
@@ -68,27 +68,27 @@ vector \code{y} (or \code{y[,1]} when censoring is considered), and to
 Specification (1) is especially useful in ANOVA-like situations where the
 location is assumed to change with the levels of some factor variable.}
 
-\item{disp, disp.h, odisp, idisp}{describe the regression model for the
+\item{disp, disp_h, odisp, idisp}{describe the regression model for the
 dispersion parameter of the fitted stable distribution, after transformation
-by the link function \code{disp.g} (set to the \code{log} function by
-default). The inverse link function is denoted by \code{disp.h}. Again these
+by the link function \code{disp_g} (set to the \code{log} function by
+default). The inverse link function is denoted by \code{disp_h}. Again these
 functions cannot contain unknown parameters. The same rules as above apply
 when specifying the generalized regression model for the dispersion
 parameter.}
 
-\item{skew, skew.h, oskew, iskew}{describe the regression model for the
+\item{skew, skew_h, oskew, iskew}{describe the regression model for the
 skewness parameter of the fitted stable distribution, after transformation
-by the link function \code{skew.g} (set to \code{log{(1 + [.])/(1 - [.])}}
-by default). The inverse link function is denoted by \code{skew.h}. Again
+by the link function \code{skew_g} (set to \code{log{(1 + [.])/(1 - [.])}}
+by default). The inverse link function is denoted by \code{skew_h}. Again
 these functions cannot contain unknown parameters. The same rules as above
 apply when specifying the generalized regression model for the skewness
 parameter.}
 
-\item{tail, tail.h, otail, itail}{describe the regression model considered
+\item{tail, tail_h, otail, itail}{describe the regression model considered
 for the tail parameter of the fitted stable distribution, after
-transformation by the link function \code{tail.g} (set to \code{log{([.] -
+transformation by the link function \code{tail_g} (set to \code{log{([.] -
 1)/(2 - [.])}} by default. The inverse link function is denoted by
-\code{tail.h}. Again these functions cannot contain unknown parameters). The
+\code{tail_h}. Again these functions cannot contain unknown parameters). The
 same rules as above apply when specifying the generalized regression model
 for the tail parameter.}
 
@@ -178,32 +178,32 @@ x <- seq(1,length(ret))-1
 
 # Classic stationary normal model tail=2
 print(z1 <- stablereg(y = ret, delta = 1/y[1:49],
-	loc = ~1, disp= ~1, skew = ~1, tail = tail.g(1.9999999),
+	loc = ~1, disp= ~1, skew = ~1, tail = tail_g(1.9999999),
 	iloc = 0, idisp = -3, iskew = 0, oskew = FALSE, otail = FALSE))
 
-# Normal model (tail=2) with dispersion=disp.h(b0+b1*day)
+# Normal model (tail=2) with dispersion=disp_h(b0+b1*day)
 print(z2 <- stablereg(y = ret, delta = 1/y[1:49], loc = ~day,
-	disp = ~1, skew = ~1, tail = tail.g(1.999999), iloc = c(0.003,0),
+	disp = ~1, skew = ~1, tail = tail_g(1.999999), iloc = c(0.003,0),
 	idisp = -4.5, iskew = 0, oskew = FALSE, otail = FALSE))
 
-# Stable model with loc(ation)=loc.h(b0+b1*day)
+# Stable model with loc(ation)=loc_h(b0+b1*day)
 print(z3 <- stablereg(y = ret, delta = 1/y[1:49],
 	loc = ~day, disp = ~1, skew = ~1, tail = ~1,
 	iloc = c(0.001,-0.004), idisp = -4.8, iskew = 0, itail = 0.6))
 
-# Stable model with disp(ersion)=disp.h(b0+b1*day)
+# Stable model with disp(ersion)=disp_h(b0+b1*day)
 print(z4 <- stablereg(y = ret, delta = 1/y[1:49],
 	loc = ~1, disp = ~day, skew = ~1, tail = ~1,
 	iloc = 0.003, idisp = c(-4.8,0), iskew = -0.03, itail = 1.6))
 
-# Stable model with skew(ness)=skew.h(b0+b1*day)
+# Stable model with skew(ness)=skew_h(b0+b1*day)
 # Evaluation at fixed parameter values (because noopt is set to TRUE)
 print(z5 <- stablereg(y = ret, delta = 1/y[1:49],
 	loc = ~1, disp = ~1, skew = ~day, tail = ~1,
 	iloc = 5.557e-04, idisp = -4.957, iskew = c(2.811,-2.158),
 	itail = 1.57, noopt=TRUE))
 
-# Stable model with tail=tail.h(b0+b1*day)
+# Stable model with tail=tail_h(b0+b1*day)
 print(z6 <- stablereg(y = ret, delta = 1/y[1:49], loc = ret ~ 1,
 	disp = ~1, skew = ~1, tail = ~day, iloc = 0.002,
 	idisp = -4.8, iskew = -2, itail = c(2.4,-4), hessian=FALSE))

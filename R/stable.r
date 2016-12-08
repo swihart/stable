@@ -29,7 +29,7 @@
 #     stablereg(y=NULL, loc=0, disp=1, skew=0, tail=1.5, 
 #		oloc=TRUE, odisp=TRUE, oskew=TRUE, otail=TRUE, noopt=FALSE,
 #		iloc=NULL, idisp=NULL,iskew=NULL, itail=NULL,
-#		loc.h=NULL, disp.h=NULL, skew.h=NULL, tail.h=NULL,
+#		loc_h=NULL, disp_h=NULL, skew_h=NULL, tail_h=NULL,
 #		weights=1, exact=FALSE, delta=1, envir=parent.frame(),
 #		integration="Romberg", eps=1e-6, up=10, npoint=501,
 #               hessian=TRUE, llik.output=FALSE, print.level=0, ndigit=10,
@@ -228,32 +228,32 @@ hstable <- function(x, loc=0,disp=1/sqrt(2),skew=0,tail=2,eps=1.0e-6){
 #' Link and inverse functions for use in stablereg
 #' 
 #' @name Links
-#' @aliases loc.g loc.h disp.g disp.h skew.g skew.h tail.g tail.h
+#' @aliases loc_g loc_h disp_g disp_h skew_g skew_h tail_g tail_h
 #' @param x the function argument
 #' @rdname Links
-#' @export loc.g
-loc.g <- function(x) x 
+#' @export loc_g
+loc_g <- function(x) x 
 #' @rdname Links
-#' @export loc.h
-loc.h <- function(x) x
+#' @export loc_h
+loc_h <- function(x) x
 #' @rdname Links
-#' @export disp.g
-disp.g <- function(x) log(x) 
+#' @export disp_g
+disp_g <- function(x) log(x) 
 #' @rdname Links
-#' @export disp.h
-disp.h <- function(x) exp(x) 
+#' @export disp_h
+disp_h <- function(x) exp(x) 
 #' @rdname Links
-#' @export skew.g
-skew.g <- function(x) log((1+x)/(1-x)) 
+#' @export skew_g
+skew_g <- function(x) log((1+x)/(1-x)) 
 #' @rdname Links
-#' @export skew.h
-skew.h <- function(x) 2/(1+exp(-x))-1  
+#' @export skew_h
+skew_h <- function(x) 2/(1+exp(-x))-1  
 #' @rdname Links
-#' @export tail.g
-tail.g <- function(x) log(x/(2-x))
+#' @export tail_g
+tail_g <- function(x) log(x/(2-x))
 #' @rdname Links
-#' @export tail.h
-tail.h <- function(x) 2/(1+exp(-x)) 
+#' @export tail_h
+tail_h <- function(x) 2/(1+exp(-x)) 
 
 ###########################################################################
 # Regression models for the four parameters in the stable distribution 
@@ -280,17 +280,17 @@ tail.h <- function(x) 2/(1+exp(-x))
 #' 
 #' For censored data, two columns with the second being the censoring indicator
 #' (1: uncensored, 0: right censored, -1: left censored.)
-#' @param loc,loc.h,oloc,iloc Describe the regression model fitted for the
+#' @param loc,loc_h,oloc,iloc Describe the regression model fitted for the
 #' location parameter of the stable distribution, perhaps after transformation
-#' by the link function \code{loc.g} (set to the identity by default. The
-#' inverse link function is denoted by \code{loc.h}. Note that these functions
+#' by the link function \code{loc_g} (set to the identity by default. The
+#' inverse link function is denoted by \code{loc_h}. Note that these functions
 #' cannot contain unknown parameters).
 #' 
 #' Two specifications are possible:
 #' 
 #' (1) \code{loc} is a linear or nonlinear language expression beginning with ~
 #' or an R function, describing the regression function for the location
-#' parameter (after transformation by \code{loc.g}, the link function).
+#' parameter (after transformation by \code{loc_g}, the link function).
 #' 
 #' \code{iloc} is a vector of initial conditions for the parameters in the
 #' regression for this parameter.
@@ -308,7 +308,7 @@ tail.h <- function(x) 2/(1+exp(-x))
 #' 
 #' If \code{oloc} is set to TRUE, i.e. when an optimization of the likelihood
 #' has to be carried out on the location parameter, then the location parameter
-#' (after transformation by the link function loc.g) is set to an unknown
+#' (after transformation by the link function loc_g) is set to an unknown
 #' parameter with initial value equal to \code{iloc[1]} or \code{loc[1]} when
 #' \code{iloc} is not specified.
 #' 
@@ -320,25 +320,25 @@ tail.h <- function(x) 2/(1+exp(-x))
 #' 
 #' Specification (1) is especially useful in ANOVA-like situations where the
 #' location is assumed to change with the levels of some factor variable.
-#' @param disp,disp.h,odisp,idisp describe the regression model for the
+#' @param disp,disp_h,odisp,idisp describe the regression model for the
 #' dispersion parameter of the fitted stable distribution, after transformation
-#' by the link function \code{disp.g} (set to the \code{log} function by
-#' default). The inverse link function is denoted by \code{disp.h}. Again these
+#' by the link function \code{disp_g} (set to the \code{log} function by
+#' default). The inverse link function is denoted by \code{disp_h}. Again these
 #' functions cannot contain unknown parameters. The same rules as above apply
 #' when specifying the generalized regression model for the dispersion
 #' parameter.
-#' @param skew,skew.h,oskew,iskew describe the regression model for the
+#' @param skew,skew_h,oskew,iskew describe the regression model for the
 #' skewness parameter of the fitted stable distribution, after transformation
-#' by the link function \code{skew.g} (set to \code{log{(1 + [.])/(1 - [.])}}
-#' by default). The inverse link function is denoted by \code{skew.h}. Again
+#' by the link function \code{skew_g} (set to \code{log{(1 + [.])/(1 - [.])}}
+#' by default). The inverse link function is denoted by \code{skew_h}. Again
 #' these functions cannot contain unknown parameters. The same rules as above
 #' apply when specifying the generalized regression model for the skewness
 #' parameter.
-#' @param tail,tail.h,otail,itail describe the regression model considered
+#' @param tail,tail_h,otail,itail describe the regression model considered
 #' for the tail parameter of the fitted stable distribution, after
-#' transformation by the link function \code{tail.g} (set to \code{log{([.] -
+#' transformation by the link function \code{tail_g} (set to \code{log{([.] -
 #' 1)/(2 - [.])}} by default. The inverse link function is denoted by
-#' \code{tail.h}. Again these functions cannot contain unknown parameters). The
+#' \code{tail_h}. Again these functions cannot contain unknown parameters). The
 #' same rules as above apply when specifying the generalized regression model
 #' for the tail parameter.
 #' @param noopt When set to TRUE, it forces \code{oloc}, \code{odisp},
@@ -408,32 +408,32 @@ tail.h <- function(x) 2/(1+exp(-x))
 #' 
 #' # Classic stationary normal model tail=2
 #' print(z1 <- stablereg(y = ret, delta = 1/y[1:49],
-#' 	loc = ~1, disp= ~1, skew = ~1, tail = tail.g(1.9999999),
+#' 	loc = ~1, disp= ~1, skew = ~1, tail = tail_g(1.9999999),
 #' 	iloc = 0, idisp = -3, iskew = 0, oskew = FALSE, otail = FALSE))
 #' 
-#' # Normal model (tail=2) with dispersion=disp.h(b0+b1*day)
+#' # Normal model (tail=2) with dispersion=disp_h(b0+b1*day)
 #' print(z2 <- stablereg(y = ret, delta = 1/y[1:49], loc = ~day,
-#' 	disp = ~1, skew = ~1, tail = tail.g(1.999999), iloc = c(0.003,0),
+#' 	disp = ~1, skew = ~1, tail = tail_g(1.999999), iloc = c(0.003,0),
 #' 	idisp = -4.5, iskew = 0, oskew = FALSE, otail = FALSE))
 #' 
-#' # Stable model with loc(ation)=loc.h(b0+b1*day)
+#' # Stable model with loc(ation)=loc_h(b0+b1*day)
 #' print(z3 <- stablereg(y = ret, delta = 1/y[1:49],
 #' 	loc = ~day, disp = ~1, skew = ~1, tail = ~1,
 #' 	iloc = c(0.001,-0.004), idisp = -4.8, iskew = 0, itail = 0.6))
 #' 
-#' # Stable model with disp(ersion)=disp.h(b0+b1*day)
+#' # Stable model with disp(ersion)=disp_h(b0+b1*day)
 #' print(z4 <- stablereg(y = ret, delta = 1/y[1:49],
 #' 	loc = ~1, disp = ~day, skew = ~1, tail = ~1,
 #' 	iloc = 0.003, idisp = c(-4.8,0), iskew = -0.03, itail = 1.6))
 #' 
-#' # Stable model with skew(ness)=skew.h(b0+b1*day)
+#' # Stable model with skew(ness)=skew_h(b0+b1*day)
 #' # Evaluation at fixed parameter values (because noopt is set to TRUE)
 #' print(z5 <- stablereg(y = ret, delta = 1/y[1:49],
 #' 	loc = ~1, disp = ~1, skew = ~day, tail = ~1,
 #' 	iloc = 5.557e-04, idisp = -4.957, iskew = c(2.811,-2.158),
 #' 	itail = 1.57, noopt=TRUE))
 #' 
-#' # Stable model with tail=tail.h(b0+b1*day)
+#' # Stable model with tail=tail_h(b0+b1*day)
 #' print(z6 <- stablereg(y = ret, delta = 1/y[1:49], loc = ret ~ 1,
 #' 	disp = ~1, skew = ~1, tail = ~day, iloc = 0.002,
 #' 	idisp = -4.8, iskew = -2, itail = c(2.4,-4), hessian=FALSE))
@@ -445,7 +445,7 @@ tail.h <- function(x) 2/(1+exp(-x))
 stablereg <- function(y=NULL, loc=0, disp=1, skew=0, tail=1.5, 
 	oloc=TRUE, odisp=TRUE, oskew=TRUE, otail=TRUE, noopt=FALSE,
 	iloc=NULL, idisp=NULL,iskew=NULL, itail=NULL,
-	loc.h=NULL, disp.h=NULL, skew.h=NULL, tail.h=NULL,
+	loc_h=NULL, disp_h=NULL, skew_h=NULL, tail_h=NULL,
 	weights=1, exact=FALSE, delta=1, envir=parent.frame(),
 	integration="Romberg", eps=1e-6, up=10, npoint=501,
 	hessian=TRUE, llik.output=FALSE, print.level=0, ndigit=10,
@@ -453,14 +453,14 @@ stablereg <- function(y=NULL, loc=0, disp=1, skew=0, tail=1.5,
 	stepmax=sqrt(p0%*%p0), iterlim=100){
 call <- sys.call()
 
-if(is.null(loc.h))loc.h <- function(x) x
-else if(!is.function(loc.h))stop("loc.h must be a link function")
-if(is.null(disp.h))disp.h <- function(x) exp(x)
-else if(!is.function(disp.h))stop("disp.h must be a link function")
-if(is.null(skew.h))skew.h <- function(x) 2/(1+exp(-x))-1
-else if(!is.function(skew.h))stop("skew.h must be a link function")
-if(is.null(tail.h))tail.h <- function(x) 2/(1+exp(-x))
-else if(!is.function(tail.h))stop("tail.h must be a link function")
+if(is.null(loc_h))loc_h <- function(x) x
+else if(!is.function(loc_h))stop("loc_h must be a link function")
+if(is.null(disp_h))disp_h <- function(x) exp(x)
+else if(!is.function(disp_h))stop("disp_h must be a link function")
+if(is.null(skew_h))skew_h <- function(x) 2/(1+exp(-x))-1
+else if(!is.function(skew_h))stop("skew_h must be a link function")
+if(is.null(tail_h))tail_h <- function(x) 2/(1+exp(-x))
+else if(!is.function(tail_h))stop("tail_h must be a link function")
 
 # If don't want to optimize at all, just set noopt=TRUE
 if(noopt)oloc <- odisp <- oskew <- otail <- FALSE
@@ -615,7 +615,7 @@ if(inherits(loc,"formula")){
 	npt1 <- length(attr(loc2,"parameters"))
 	if(is.character(attr(loc2,"model"))){
 		if(length(attr(loc2,"model"))==1){
-			loc1 <- function(p) loc.h(p[1]*rep(1,n))
+			loc1 <- function(p) loc_h(p[1]*rep(1,n))
 			attributes(loc1) <- attributes(loc2)
 			loc2 <- NULL}}
 	else {
@@ -632,9 +632,9 @@ if(inherits(loc,"formula")){
 	if(!is.null(loc2)){
 		if(inherits(envir,"tccov")){
 			cv <- covind(y)
-			loc1 <- function(p) loc.h(loc2(p)[cv])
+			loc1 <- function(p) loc_h(loc2(p)[cv])
 			attributes(loc1) <- attributes(loc2)}
-		else loc1 <- function(p) loc.h(loc2(p))
+		else loc1 <- function(p) loc_h(loc2(p))
 		attributes(loc1) <- attributes(loc2)}}
 else if(is.function(loc))loc1 <- loc
 if(!is.null(loc1)&&is.null(attr(loc1,"parameters"))){
@@ -664,23 +664,23 @@ if(inherits(loc,"formula")||is.function(loc)){
 			stop(paste("iloc must be of size ",nploc))
 		else fnloc <- function(p) loc1(iloc)}}
 else if(oloc){
-	fnloc <- function(p) loc.h(rep(p[1],n))
+	fnloc <- function(p) loc_h(rep(p[1],n))
 	if(!is.numeric(iloc)){
 		iloc <- loc[1]
 		nploc <- 1}}
 else {
 					# IMPORTANT
-	if(length(loc)==n)fnloc <- function(p) loc.h(loc)
+	if(length(loc)==n)fnloc <- function(p) loc_h(loc)
 					# IMPORTANT
-	else fnloc <- function(p) rep(loc.h(loc[1]),n)
+	else fnloc <- function(p) rep(loc_h(loc[1]),n)
 	nploc <- 1}
 
 # DISP
-# Note that we work with the disp.g link (log link by default).
+# Note that we work with the disp_g link (log link by default).
 # This means that language description of the disp model and
 # initial conditions are understood on that scale!!
-# Non language description of disp are also understood on the disp.g scale 
-# and specified using disp=<value>, yielding disp.h(<value>) for the 
+# Non language description of disp are also understood on the disp_g scale 
+# and specified using disp=<value>, yielding disp_h(<value>) for the 
 # parameter disp.
 
 npl2 <- if(odisp)nploc*oloc+1 else 1
@@ -691,7 +691,7 @@ if(inherits(disp,"formula")){
 	npt2 <- length(attr(disp2,"parameters"))
 	if(is.character(attr(disp2,"model"))){
 		if(length(attr(disp2,"model"))==1){
-			disp1 <- function(p) disp.h(p[npl2]*rep(1,n))
+			disp1 <- function(p) disp_h(p[npl2]*rep(1,n))
 			attributes(disp1) <- attributes(disp2)
 			disp2 <- NULL}}
 	else {
@@ -708,8 +708,8 @@ if(inherits(disp,"formula")){
 	if(!is.null(disp2)){
 		if(inherits(envir,"tccov")){
 			cv <- covind(y)
-			disp1 <- function(p) disp.h(disp2(p)[cv])}
-		else disp1 <- function(p) disp.h(disp2(p))
+			disp1 <- function(p) disp_h(disp2(p)[cv])}
+		else disp1 <- function(p) disp_h(disp2(p))
 		attributes(disp1) <- attributes(disp2)}}
 else if(is.function(disp))disp1 <- function(p) disp(p[npl2:(npl2+npdisp-1)])
 if(!is.null(disp1)&&is.null(attr(disp1,"parameters"))){
@@ -739,23 +739,23 @@ if(inherits(disp,"formula")||is.function(disp)){
 			stop(paste("idisp must be of size ",npdisp))
 		else fndisp <- function(p) disp1(idisp)}}
 else if(odisp){
-	fndisp <- function(p) disp.h(rep(p[npl2],n))
+	fndisp <- function(p) disp_h(rep(p[npl2],n))
 	if(!is.numeric(idisp)){
 		idisp <- disp[1]
 		npdisp <- 1}}
 else {
 				# IMPORTANT
-	if(length(disp)==n)fndisp <- function(p) disp.h(disp)
+	if(length(disp)==n)fndisp <- function(p) disp_h(disp)
 				# IMPORTANT
-	else fndisp <- function(p) rep(disp.h(disp[1]),n)
+	else fndisp <- function(p) rep(disp_h(disp[1]),n)
 	npdisp <- 1}
 
 # SKEW
-# Note that, y default, we work with the skew.g([.])=log{(1+[.])/(1-[.])} link.
+# Note that, y default, we work with the skew_g([.])=log{(1+[.])/(1-[.])} link.
 # This means that language description of the skew model and
 # the possible initial conditions are understood on that scale!!
-# Non language description of skew are also understood on the skew.g scale 
-# and specified using skew=<value>, yielding skew.h(<value>) for the 
+# Non language description of skew are also understood on the skew_g scale 
+# and specified using skew=<value>, yielding skew_h(<value>) for the 
 # parameter skew.
 
 npl3 <- if(oskew)nploc*oloc+npdisp*odisp+1 else 1
@@ -766,7 +766,7 @@ if(inherits(skew,"formula")){
 	npt3 <- length(attr(skew2,"parameters"))
 	if(is.character(attr(skew2,"model"))){
 		if(length(attr(skew2,"model"))==1){
-			skew1 <- function(p) skew.h(p[npl3]*rep(1,n))
+			skew1 <- function(p) skew_h(p[npl3]*rep(1,n))
 			attributes(skew1) <- attributes(skew2)
 			skew2 <- NULL}}
 	else {
@@ -783,8 +783,8 @@ if(inherits(skew,"formula")){
 	if(!is.null(skew2)){
 		if(inherits(envir,"tccov")){
 			cv <- covind(y)
-			skew1 <- function(p) skew.h(skew2(p)[cv])}
-		else skew1 <- function(p) skew.h(skew2(p))
+			skew1 <- function(p) skew_h(skew2(p)[cv])}
+		else skew1 <- function(p) skew_h(skew2(p))
 		attributes(skew1) <- attributes(skew2)}}
 else if(is.function(skew))skew1 <- function(p) skew(p[npl3:(npl3+npskew-1)])
 if(!is.null(skew1)&&is.null(attr(skew1,"parameters"))){
@@ -814,21 +814,21 @@ if(inherits(skew,"formula")||is.function(skew)){
 			stop(paste("iskew must be of size ",npskew))
 		else fnskew <- function(p) skew1(iskew)}}
 else if(oskew){
-	fnskew <- function(p) skew.h(rep(p[npl3],n))
+	fnskew <- function(p) skew_h(rep(p[npl3],n))
 	if(!is.numeric(iskew)){
 		iskew <- skew[1]
 		npskew <- 1}}
 else {
-	if(length(skew)==n) fnskew <- function(p) skew.h(skew)
-	else fnskew <- function(p) rep(skew.h(skew[1]),n) # IMPORTANT
+	if(length(skew)==n) fnskew <- function(p) skew_h(skew)
+	else fnskew <- function(p) rep(skew_h(skew[1]),n) # IMPORTANT
 	npskew <- 1}
 
 # TAIL
-# Note that we work with the tail.g([.])=log{([.]-1)/(2-[.])} link.
+# Note that we work with the tail_g([.])=log{([.]-1)/(2-[.])} link.
 # This means that language description of the tail model and
 # the possible initial conditions are understood on that scale!!
-# Non language description of tail are also understood on the tail.g scale 
-# and specified using tail=<value>, yielding tail.h(<value>) for the 
+# Non language description of tail are also understood on the tail_g scale 
+# and specified using tail=<value>, yielding tail_h(<value>) for the 
 # parameter tail.
 
 npl4 <- if(otail)nploc*oloc+npdisp*odisp+npskew*oskew+1 else 1
@@ -839,7 +839,7 @@ if(inherits(tail,"formula")){
 	npt4 <- length(attr(tail2,"parameters"))
 	if(is.character(attr(tail2,"model"))){
 		if(length(attr(tail2,"model"))==1){
-			tail1 <- function(p) tail.h(p[npl4]*rep(1,n))
+			tail1 <- function(p) tail_h(p[npl4]*rep(1,n))
 			attributes(tail1) <- attributes(tail2)
 			tail2 <- NULL}}
 	else {
@@ -856,8 +856,8 @@ if(inherits(tail,"formula")){
 	if(!is.null(tail2)){
 		if(inherits(envir,"tccov")){
 			cv <- covind(y)
-			tail1 <- function(p) tail.h(tail2(p)[cv])}
-		else tail1 <- function(p) tail.h(tail2(p))
+			tail1 <- function(p) tail_h(tail2(p)[cv])}
+		else tail1 <- function(p) tail_h(tail2(p))
 		attributes(tail1) <- attributes(tail2)}}
 else if(is.function(tail))tail1 <- function(p) tail(p[npl4:(npl4+nptail-1)])
 if(!is.null(tail1)&&is.null(attr(tail1,"parameters"))){
@@ -887,13 +887,13 @@ if(inherits(tail,"formula")||is.function(tail)){
 			stop(paste("itail must be of size ",nptail))
 		else fntail <- function(p) tail1(itail)}}
 else if(otail){
-	fntail <- function(p) tail.h(rep(p[npl4],n))
+	fntail <- function(p) tail_h(rep(p[npl4],n))
 	if(!is.numeric(itail)){
 		itail <- tail[1]
 		nptail <- 1}}
 else {
-	if(length(tail)==n)fntail <- function(p) tail.h(tail)
-	else fntail <- function(p) rep(tail.h(tail[1]),n) # IMPORTANT
+	if(length(tail)==n)fntail <- function(p) tail_h(tail)
+	else fntail <- function(p) rep(tail_h(tail[1]),n) # IMPORTANT
 	nptail <- 1}
 
 # Computation of -log-likelihood
