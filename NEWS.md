@@ -10,6 +10,9 @@ to pass CRAN checks.
 I'll try to document the changes henceforth here and at 
 https://github.com/swihart/stable/issues.
 
+  * loc.g, loc.h, disp.g, disp.h, skew.g, skew.h, tail.g, tail.h are now replaced 
+  with loc_g, loc_h, disp_g, disp_h, skew_g, skew_h, tail_g, tail_h respectively.
+
 **Above this line will be News/Changes for `stable` only**
 
 **Below this line corresponds to [changes.txt](http://www.commanster.eu/rcode/changes.txt), which was Jim Lindsey's file for
