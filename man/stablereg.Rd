@@ -27,7 +27,7 @@ used here.
 For censored data, two columns with the second being the censoring indicator
 (1: uncensored, 0: right censored, -1: left censored.)}
 
-\item{loc, loc.h, oloc, andiloc}{Describe the regression model fitted for the
+\item{loc, loc.h, oloc, iloc}{Describe the regression model fitted for the
 location parameter of the stable distribution, perhaps after transformation
 by the link function \code{loc.g} (set to the identity by default. The
 inverse link function is denoted by \code{loc.h}. Note that these functions
@@ -68,7 +68,7 @@ vector \code{y} (or \code{y[,1]} when censoring is considered), and to
 Specification (1) is especially useful in ANOVA-like situations where the
 location is assumed to change with the levels of some factor variable.}
 
-\item{disp, disp.h, odisp, andidisp}{describe the regression model for the
+\item{disp, disp.h, odisp, idisp}{describe the regression model for the
 dispersion parameter of the fitted stable distribution, after transformation
 by the link function \code{disp.g} (set to the \code{log} function by
 default). The inverse link function is denoted by \code{disp.h}. Again these
@@ -76,7 +76,7 @@ functions cannot contain unknown parameters. The same rules as above apply
 when specifying the generalized regression model for the dispersion
 parameter.}
 
-\item{skew, skew.h, oskew, andiskew}{describe the regression model for the
+\item{skew, skew.h, oskew, iskew}{describe the regression model for the
 skewness parameter of the fitted stable distribution, after transformation
 by the link function \code{skew.g} (set to \code{log{(1 + [.])/(1 - [.])}}
 by default). The inverse link function is denoted by \code{skew.h}. Again
@@ -84,7 +84,7 @@ these functions cannot contain unknown parameters. The same rules as above
 apply when specifying the generalized regression model for the skewness
 parameter.}
 
-\item{tail, tail.h, otail, anditail}{describe the regression model considered
+\item{tail, tail.h, otail, itail}{describe the regression model considered
 for the tail parameter of the fitted stable distribution, after
 transformation by the link function \code{tail.g} (set to \code{log{([.] -
 1)/(2 - [.])}} by default. The inverse link function is denoted by
@@ -115,16 +115,31 @@ data object of class, \code{repeated}, \code{tccov}, or \code{tvcov}; the
 name of the response variable should be given in \code{y}. If \code{y} has
 class \code{repeated}, it is used as the environment.}
 
-\item{integration, eps, upandnpoint}{\code{integration} indicates which
+\item{integration, eps, up, npoint}{\code{integration} indicates which
 algorithm must be used to evaluate the stable density when the likelihood is
 computed with \code{exact} set to FALSE. See the man page on
-\code{\link[stable]{stable}} for extra information.}
+\code{stable} for extra information.}
+
+\item{hessian}{Arguments controlling the optimization procedure \code{\link{nlm}}.}
 
 \item{llik.output}{is TRUE when the likelihood has to be displayed at each
 iteration of the optimization.}
 
-\item{others}{Arguments controlling the optimization procedure
-\code{\link{nlm}}.}
+\item{print.level}{Arguments controlling the optimization procedure \code{\link{nlm}}.}
+
+\item{ndigit}{Arguments controlling the optimization procedure \code{\link{nlm}}.}
+
+\item{steptol}{Arguments controlling the optimization procedure \code{\link{nlm}}.}
+
+\item{gradtol}{Arguments controlling the optimization procedure \code{\link{nlm}}.}
+
+\item{fscale}{Arguments controlling the optimization procedure \code{\link{nlm}}.}
+
+\item{typsize}{Arguments controlling the optimization procedure \code{\link{nlm}}.}
+
+\item{stepmax}{Arguments controlling the optimization procedure \code{\link{nlm}}.}
+
+\item{iterlim}{Arguments controlling the optimization procedure \code{\link{nlm}}.}
 }
 \value{
 A list of class \code{stable} is returned. The printed output
@@ -204,8 +219,8 @@ using regression models based on non-symmetric stable distributions. Applied
 Statistics 48, 409-424.
 }
 \seealso{
-\code{\link{lm}}, \code{\link{glm}}, \code{\link[stable]{stable}}
-and \code{\link[stable]{stable.mode}}.
+\code{\link{lm}}, \code{\link{glm}}, \code{stable}
+and \code{stable.mode}.
 }
 \keyword{models}
 

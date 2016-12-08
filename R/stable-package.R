@@ -62,10 +62,10 @@
 #' @param eps scalar giving the required precision in computation.
 #' @author Philippe Lambert (Catholic University of Louvain, Belgium,
 #' \email{phlambert@@stat.ucl.ac.be}) and Jim Lindsey.
-#' @seealso \code{\link[stable]{stablereg}} to fit generalized nonlinear
+#' @seealso \code{stablereg} to fit generalized nonlinear
 #' regression models for the stable distribution parameters.
 #' 
-#' \code{\link[stable]{stable.mode}} to compute the mode of a stable
+#' \code{stable.mode} to compute the mode of a stable
 #' distribution.
 #' @references Lambert, P. and Lindsey, J.K. (1999) Analysing financial returns
 #' using regression models based on non-symmetric stable distributions. Applied

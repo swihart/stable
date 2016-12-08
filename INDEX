@@ -1,6 +1,0 @@
-dstable		Density of a Stable Distribution
-hstable		Intensity Function of a	Stable Distribution
-pstable		CDF of a Stable Distribution
-rstable		Generation of Random Deviates from a Stable Distribution
-stablereg	Generalized Regression Models Based on the Stable Distribution
-stable.mode	Mode of a Stable Distribution

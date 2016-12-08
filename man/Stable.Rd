@@ -1,11 +1,11 @@
 \name{stable}
 \title{Stable Distribution}
 \usage{
-dstable(y, loc=0, disp=1/sqrt(2), skew=0, tail=2,
+dstable(x, loc=0, disp=1/sqrt(2), skew=0, tail=2,
 		npt=501, up=10, eps=1.0e-6, integration="Romberg")
-pstable(y, loc=0, disp=1/sqrt(2), skew=0, tail=2, eps=1.0e-6)
-qstable(q, loc=0, disp=1/sqrt(2), skew=0, tail=2, eps=1.0e-6)
-hstable(y, loc=0, disp=1/sqrt(2), skew=0, tail=2, eps=1.0e-6)
+pstable(q, loc=0, disp=1/sqrt(2), skew=0, tail=2, eps=1.0e-6)
+qstable(p, loc=0, disp=1/sqrt(2), skew=0, tail=2, eps=1.0e-6)
+hstable(x, loc=0, disp=1/sqrt(2), skew=0, tail=2, eps=1.0e-6)
 rstable(n=1, loc=0, disp=1/sqrt(2), skew=0, tail=2, eps=1.0e-6)
 }
 \alias{dstable}
@@ -69,7 +69,7 @@ These three extra arguments -- \code{integration}, \code{up} and
 The other functions are all based on Romberg's algorithm.
 }
 \arguments{
-\item{y,q}{vector of quantiles.}
+\item{x,q}{vector of quantiles.}
 \item{p}{vector of probabilites.}
 \item{n}{number of observations.}
 \item{loc}{vector of (real) location parameters.}
@@ -77,6 +77,7 @@ The other functions are all based on Romberg's algorithm.
 \item{skew}{vector of skewness parameters (in [-1,1]).}
 \item{tail}{vector of parameters (in [0,2]) related to the tail thickness.}
 \item{eps}{scalar giving the required precision in computation.}
+\item{npt,up,integration}{As detailed herein -- only available when using \code{dstable}.}
 }
 \references{
 Lambert, P. and Lindsey, J.K. (1999) Analysing financial returns using

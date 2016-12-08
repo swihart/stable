@@ -42,9 +42,9 @@
 #    Functions to obtain information about a stable distribution
 #  and to fit regression models using this distribution.
 
-.First.lib <- function(lib, pkg)
-	library.dynam("stable", pkg, lib)
-require(rmutil)
+# .First.lib <- function(lib, pkg)
+# 	library.dynam("stable", pkg, lib)
+# require(rmutil)
 
 ###########################################################################
 # Density of a stable distribution
@@ -53,8 +53,11 @@ require(rmutil)
 # Note that it is obtained by integrating a function from 0 to Infinity.
 # This integral is approximated by the finite integral from 0 to UP
 # using the Simpson's method with npt points or Romberg's integration
-dstable <- function(y, loc=0, disp=1/sqrt(2), skew=0, tail=2,
+#' @describeIn stable density
+#' @export
+dstable <- function(x, loc=0, disp=1/sqrt(2), skew=0, tail=2,
 		npt=501, up=10, eps=1.0e-6, integration="Romberg"){
+  y<-x
 	ly <- max(length(y),length(loc),length(disp),length(skew),length(tail))
 	if(length(y)!=ly){
 		if(length(y)==1)y <- rep(y,ly)
@@ -95,7 +98,10 @@ dstable <- function(y, loc=0, disp=1/sqrt(2), skew=0, tail=2,
 ###########################################################################
 # c.d.f. of a stable distribution
 #
-pstable <- function(y, loc=0,disp=1/sqrt(2),skew=0,tail=2,eps=1.0e-6){
+#' @describeIn stable cdf
+#' @export
+pstable <- function(q, loc=0,disp=1/sqrt(2),skew=0,tail=2,eps=1.0e-6){
+  y <- q
 	yy <- (y-loc)/disp
 	ly <- max(length(y),length(loc),length(disp),length(skew),length(tail))
 	if(length(y)!=ly){
@@ -133,8 +139,10 @@ pstable <- function(y, loc=0,disp=1/sqrt(2),skew=0,tail=2,eps=1.0e-6){
 ###########################################################################
 # Quantile function of a stable random variable
 #
-
-qstable <- function(q, loc=0, disp=1/sqrt(2), skew=0, tail=2, eps=1.0e-6){
+#' @describeIn stable quantiles
+#' @export
+qstable <- function(p, loc=0, disp=1/sqrt(2), skew=0, tail=2, eps=1.0e-6){
+  q <- p
 	h <- function(y).C("pstable",
 		as.integer(1),
 		as.double((y-loc[i])/disp[i]),
@@ -190,6 +198,8 @@ qstable <- function(q, loc=0, disp=1/sqrt(2), skew=0, tail=2, eps=1.0e-6){
 ###########################################################################
 # Generation of stable random deviates
 #
+#' @describeIn stable random deviates
+#' @export
 rstable <- function(n=1,loc=0,disp=1/sqrt(2),skew=0,tail=2,eps=1.0e-6){
 	tmp1 <- qstable(runif(n),loc=loc,disp=disp,skew=skew,tail=tail,eps=eps)
 	tmp2 <- tmp1[!is.na(tmp1)]
@@ -203,23 +213,47 @@ rstable <- function(n=1,loc=0,disp=1/sqrt(2),skew=0,tail=2,eps=1.0e-6){
 ###########################################################################
 # Stable hazard
 #
-hstable <- function(y, loc=0,disp=1/sqrt(2),skew=0,tail=2,eps=1.0e-6)
+#' @describeIn stable hazard
+#' @export
+hstable <- function(x, loc=0,disp=1/sqrt(2),skew=0,tail=2,eps=1.0e-6){
+  y <- x
 	dstable(y,loc=loc,disp=disp,skew=skew,tail=tail,eps=eps)/
-		(1-pstable(y,loc=loc,disp=disp,skew=skew,tail=tail,eps=eps))
+		(1-pstable(y,loc=loc,disp=disp,skew=skew,tail=tail,eps=eps))}
 
 ###########################################################################
 # Link and inverse link functions for use in stablereg
 
-loc.g <- function(x) x # link function for loc
-loc.h <- function(x) x # inverse link function for disp
-disp.g <- function(x) log(x) # link function for disp
-disp.h <- function(x) exp(x) # inverse link function for disp
-skew.g <- function(x) log((1+x)/(1-x)) # link function for skew 
-skew.h <- function(x) 2/(1+exp(-x))-1  # inverse link function for skew
-#tail.g <- function(x) log((x-1)/(2-x)) # link function for tail in (1,2)
-#tail.h <- function(x) 1/(1+exp(-x))+1  # inverse link function for tail
-tail.g <- function(x) log(x/(2-x)) # link function for tail in (0,2)
-tail.h <- function(x) 2/(1+exp(-x))  # inverse link function for tail
+#' Links
+#' 
+#' Link and inverse functions for use in stablereg
+#' 
+#' @name Links
+#' @aliases loc.g loc.h disp.g disp.h skew.g skew.h tail.g tail.h
+#' @param x the function argument
+#' @rdname Links
+#' @export loc.g
+loc.g <- function(x) x 
+#' @rdname Links
+#' @export loc.h
+loc.h <- function(x) x
+#' @rdname Links
+#' @export disp.g
+disp.g <- function(x) log(x) 
+#' @rdname Links
+#' @export disp.h
+disp.h <- function(x) exp(x) 
+#' @rdname Links
+#' @export skew.g
+skew.g <- function(x) log((1+x)/(1-x)) 
+#' @rdname Links
+#' @export skew.h
+skew.h <- function(x) 2/(1+exp(-x))-1  
+#' @rdname Links
+#' @export tail.g
+tail.g <- function(x) log(x/(2-x))
+#' @rdname Links
+#' @export tail.h
+tail.h <- function(x) 2/(1+exp(-x)) 
 
 ###########################################################################
 # Regression models for the four parameters in the stable distribution 
@@ -246,7 +280,7 @@ tail.h <- function(x) 2/(1+exp(-x))  # inverse link function for tail
 #' 
 #' For censored data, two columns with the second being the censoring indicator
 #' (1: uncensored, 0: right censored, -1: left censored.)
-#' @param loc,loc.h,oloc,andiloc Describe the regression model fitted for the
+#' @param loc,loc.h,oloc,iloc Describe the regression model fitted for the
 #' location parameter of the stable distribution, perhaps after transformation
 #' by the link function \code{loc.g} (set to the identity by default. The
 #' inverse link function is denoted by \code{loc.h}. Note that these functions
@@ -286,21 +320,21 @@ tail.h <- function(x) 2/(1+exp(-x))  # inverse link function for tail
 #' 
 #' Specification (1) is especially useful in ANOVA-like situations where the
 #' location is assumed to change with the levels of some factor variable.
-#' @param disp,disp.h,odisp,andidisp describe the regression model for the
+#' @param disp,disp.h,odisp,idisp describe the regression model for the
 #' dispersion parameter of the fitted stable distribution, after transformation
 #' by the link function \code{disp.g} (set to the \code{log} function by
 #' default). The inverse link function is denoted by \code{disp.h}. Again these
 #' functions cannot contain unknown parameters. The same rules as above apply
 #' when specifying the generalized regression model for the dispersion
 #' parameter.
-#' @param skew,skew.h,oskew,andiskew describe the regression model for the
+#' @param skew,skew.h,oskew,iskew describe the regression model for the
 #' skewness parameter of the fitted stable distribution, after transformation
 #' by the link function \code{skew.g} (set to \code{log{(1 + [.])/(1 - [.])}}
 #' by default). The inverse link function is denoted by \code{skew.h}. Again
 #' these functions cannot contain unknown parameters. The same rules as above
 #' apply when specifying the generalized regression model for the skewness
 #' parameter.
-#' @param tail,tail.h,otail,anditail describe the regression model considered
+#' @param tail,tail.h,otail,itail describe the regression model considered
 #' for the tail parameter of the fitted stable distribution, after
 #' transformation by the link function \code{tail.g} (set to \code{log{([.] -
 #' 1)/(2 - [.])}} by default. The inverse link function is denoted by
@@ -325,14 +359,21 @@ tail.h <- function(x) 2/(1+exp(-x))  # inverse link function for tail
 #' data object of class, \code{repeated}, \code{tccov}, or \code{tvcov}; the
 #' name of the response variable should be given in \code{y}. If \code{y} has
 #' class \code{repeated}, it is used as the environment.
-#' @param integration,eps,upandnpoint \code{integration} indicates which
+#' @param integration,eps,up,npoint \code{integration} indicates which
 #' algorithm must be used to evaluate the stable density when the likelihood is
 #' computed with \code{exact} set to FALSE. See the man page on
-#' \code{\link[stable]{stable}} for extra information.
+#' \code{stable} for extra information.
 #' @param llik.output is TRUE when the likelihood has to be displayed at each
 #' iteration of the optimization.
-#' @param others Arguments controlling the optimization procedure
-#' \code{\link{nlm}}.
+#' @param print.level Arguments controlling the optimization procedure \code{\link{nlm}}.
+#' @param ndigit Arguments controlling the optimization procedure \code{\link{nlm}}.
+#' @param steptol Arguments controlling the optimization procedure \code{\link{nlm}}.
+#' @param gradtol Arguments controlling the optimization procedure \code{\link{nlm}}.
+#' @param fscale Arguments controlling the optimization procedure \code{\link{nlm}}.
+#' @param typsize Arguments controlling the optimization procedure \code{\link{nlm}}.
+#' @param stepmax Arguments controlling the optimization procedure \code{\link{nlm}}.
+#' @param iterlim Arguments controlling the optimization procedure \code{\link{nlm}}.
+#' @param hessian Arguments controlling the optimization procedure \code{\link{nlm}}.
 #' @return A list of class \code{stable} is returned. The printed output
 #' includes the -log-likelihood, the corresponding AIC, the maximum likelihood
 #' estimates, standard errors, and correlations. It also include all the
@@ -344,8 +385,8 @@ tail.h <- function(x) 2/(1+exp(-x))  # inverse link function for tail
 #' likelihood function, the integration may hang for a long time.
 #' @author Philippe Lambert (Catholic University of Louvain, Belgium,
 #' \email{phlambert@@stat.ucl.ac.be}) and Jim Lindsey.
-#' @seealso \code{\link{lm}}, \code{\link{glm}}, \code{\link[stable]{stable}}
-#' and \code{\link[stable]{stable.mode}}.
+#' @seealso \code{\link{lm}}, \code{\link{glm}}, \code{stable}
+#' and \code{stable.mode}.
 #' @references Lambert, P. and Lindsey, J.K. (1999) Analysing financial returns
 #' using regression models based on non-symmetric stable distributions. Applied
 #' Statistics 48, 409-424.
@@ -397,6 +438,10 @@ tail.h <- function(x) 2/(1+exp(-x))  # inverse link function for tail
 #' 	disp = ~1, skew = ~1, tail = ~day, iloc = 0.002,
 #' 	idisp = -4.8, iskew = -2, itail = c(2.4,-4), hessian=FALSE))
 #' 
+#' @importFrom stats dcauchy dnorm nlm pcauchy pnorm qcauchy qnorm runif uniroot
+#' @import  rmutil
+#' @useDynLib stable
+#' @export
 stablereg <- function(y=NULL, loc=0, disp=1, skew=0, tail=1.5, 
 	oloc=TRUE, odisp=TRUE, oskew=TRUE, otail=TRUE, noopt=FALSE,
 	iloc=NULL, idisp=NULL,iskew=NULL, itail=NULL,
@@ -996,7 +1041,7 @@ else z <- llikstable(p0)
   
 ytilde.tamp <- stable.mode(z$loc,z$disp,z$skew,z$tail)$ytilde  
   # corresponding mode 
-tamp <- dstable(y=ytilde.tamp, loc=z$loc, disp=z$disp, skew=z$skew,
+tamp <- dstable(x=ytilde.tamp, loc=z$loc, disp=z$disp, skew=z$skew,
 		tail=z$tail, npt=npoint, up=up, integration=integration)
 llik.ytilde <- -(log(tamp)+log(delta))*weights
 
@@ -1230,10 +1275,10 @@ if(!is.null(z$hessian)&&z$hessian&&np>1&&correlation){
 #' @return A list of size 3 giving the mode, \eqn{a} and \eqn{b}.
 #' @author Philippe Lambert (Catholic University of Louvain, Belgium,
 #' \email{phlambert@@stat.ucl.ac.be}) and Jim Lindsey.
-#' @seealso \code{\link[stable]{stable}} for more details on the stable
+#' @seealso \code{stable} for more details on the stable
 #' distribution.
 #' 
-#' \code{\link[stable]{stablereg}} to fit generalized linear models for the
+#' \code{stablereg} to fit generalized linear models for the
 #' stable distribution parameters.
 #' @references Lambert, P. and Lindsey, J.K. (1999) Analysing financial returns
 #' using regression models based on non-symmetric stable distributions. Applied

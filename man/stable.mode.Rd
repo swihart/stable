@@ -65,10 +65,10 @@ using regression models based on non-symmetric stable distributions. Applied
 Statistics, 48, 409-424.
 }
 \seealso{
-\code{\link[stable]{stable}} for more details on the stable
+\code{stable} for more details on the stable
 distribution.
 
-\code{\link[stable]{stablereg}} to fit generalized linear models for the
+\code{stablereg} to fit generalized linear models for the
 stable distribution parameters.
 }
 \keyword{distribution}
