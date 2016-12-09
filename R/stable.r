@@ -1264,8 +1264,8 @@ if(!is.null(z$hessian)&&z$hessian&&np>1&&correlation){
 #' The simplest empirical formula found to give a satisfactory approximation to
 #' the mode for values of \code{tail} in \eqn{(1,2)} is \deqn{
 #' loc+disp*a*skew*exp(-b*abs(skew))} with \deqn{ a =
-#' 1.7665114+1.8417675*tail-2.2954390*tail^2+0.4666749*tail^3 \cr b =
-#' -0.003142967+632.4715*tail*exp(-7.106035*tail)}
+#' 1.7665114+1.8417675*tail-2.2954390*tail^2+0.4666749*tail^3} and \deqn{ b =
+#' -0.003142967+632.4715*tail*exp(-7.106035*tail)}.
 #' 
 #' 
 #' @param loc vector of (real) location parameters.
