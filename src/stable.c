@@ -115,7 +115,7 @@ static double evalfn(double (*fcn)(double), int n)
 static double romberg(double (*fcn)(double), double eps)
 {
   int j,j1;
-  double sum,errsum,x[16],fx[16];
+  double sum,errsum=0,x[16],fx[16];
 
   x[0]=1.0;
   for(j=0;j<16;j++){
