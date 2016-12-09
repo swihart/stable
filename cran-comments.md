@@ -5,7 +5,7 @@ December 2016
 ## Test environments
 * local OS X install: R version 3.3.2 (2016-10-31)
 * ubuntu 12.04 (on travis-ci): R version 3.3.1 (2016-06-21)
-* win-builder:        R Under development (unstable) (2016-12-06 r71739)
+* win-builder: R Under development (unstable) (2016-12-08 r71752)
 
 ## R CMD check results
 There were no ERRORs or WARNINGs. 
