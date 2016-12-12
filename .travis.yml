@@ -65,9 +65,9 @@ before_script:
              export CFLAGS=$UBSAN_FLAGS
              export LDFLAGS=$UBSAN_FLAGS
          fi
-script:
-    - ./configure && make && make check
-    - |
-          if [ "$BUILD_TYPE" = "coverage" ]; then
-              cpp-coveralls --gcov-options '\-lp'
-          fi
+#script:
+#    - ./configure && make && make check
+#    - |
+#          if [ "$BUILD_TYPE" = "coverage" ]; then
+#              cpp-coveralls --gcov-options '\-lp'
+#          fi
