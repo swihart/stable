@@ -4,14 +4,28 @@ language: R
 sudo: false
 cache: packages
 
+env:
+ global:
+   - CRAN: http://cran.rstudio.com
+   
+notifications:
+  email:
+    on_success: change
+    on_failure: change
+
+
 #lifted from: http://travistoptips.blogspot.com/2015/11/default-template.html
 matrix:
     include:
         - os: linux
           compiler: gcc
+          r: release
+          r_check_args: --as-cran
           env: BUILD_TYPE=normal
         - os: linux
           compiler: clang
+          r: release
+          r_check_args: --as-cran
           env: BUILD_TYPE=normal
         - os: linux
           compiler: gcc
@@ -21,6 +35,8 @@ matrix:
           env: BUILD_TYPE=ubsan
         - os: linux
           compiler: clang
+          r: release
+          r_check_args: --as-cran
           env: BUILD_TYPE=asan
         - os: linux
           compiler: clang
