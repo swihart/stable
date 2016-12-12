@@ -62,7 +62,7 @@ static double fcn4(double s){
 static void interp(double x[], double fx[], double *f, double *df)
 {
   int i, j, ni=0;
-  double diff1, diff2, tmp1, tmp2, lim1, lim2, tab1[5], tab2[5];
+  double diff1, diff2, tmp1, tmp2, lim1, lim2, tab1[6], tab2[5];
  
   tmp1=fabs(x[0]);
   for(i=0;i<5;i++){
