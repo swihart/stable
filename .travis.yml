@@ -2,3 +2,8 @@
 language: R
 sudo: false
 cache: packages
+
+export: CC = gcc -std=gnu99 -fsanitize=address -fno-omit-frame-pointer
+export: CXX = g++ -fsanitize=address -fno-omit-frame-pointer
+export: F77 = gfortran -fsanitize=address
+export: FC = gfortran -fsanitize=address
