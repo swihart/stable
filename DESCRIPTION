@@ -12,7 +12,8 @@ Depends:
     rmutil
 Description: Density, distribution, quantile and hazard functions of a
     stable variate; generalized regression models for the parameters
-    of a stable distribution.
+    of a stable distribution. See the README for how to make equivalent calls
+    to those of 'stabledist'. 
 License: GPL (>= 2)
 URL: http://www.commanster.eu/rcode.html
 BugReports: https:/github.com/swihart/stable/issues

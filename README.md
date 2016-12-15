@@ -12,6 +12,19 @@ To compare this version with the static v1.0 files on [Jim Lindsey's Homepage](h
 comparisons with `stabledist` R package
 =======================================
 
+In brief, the parameters have different names and are transformations for each other. First, the names:
+
+| stabledist | stable |
+|------------|--------|
+| alpha      | tail   |
+| beta       | skew   |
+| gamma      | disp   |
+| delta      | loc    |
+
+If you read the Lindsey PDF in this repo, be aware that location is given the greek letter gamma and scale is given the greek letter delta. The Nolan PDF does the opposite and is used for `stabledist`.
+
+For some values for some distributions things match up nicely, as we see with Normal and Cauchy:
+
 normal distribution
 -------------------
 
@@ -34,35 +47,73 @@ stabledist::pstable(q, alpha=1, beta=0, gamma=1, delta=0)
 #> [1] 0.8975836
 ```
 
-levy cdf (not working as expected...)
--------------------------------------
+However, to make `stable` equivalent to `stabledist` in general, some transformations are needed. Please see the following examples. Between `stabledist` and `stable`, the `alpha` is equivalent to `tail` and the `delta` is equivalent to `loc` with no transformation. For the `beta` (`skew`) and `gamma` (`disp`) parameters, a transformation is needed to get equivalent calls. Note differences still may exist to numerical accuracy.
+
+levy cdf
+--------
 
 ``` r
 q <-  0.9
+
+# nolan pm=1 parameters:
 a <-  0.5
 b <-  1
 c <-  .25
 d <-  0.8
-    stable::pstable(q, tail =a, skew=b, disp =c, loc  =d)
-#> [1] 0.2650645
-stabledist::pstable(q, alpha=a, beta=b, gamma=c, delta=d, pm=1)
+
+# lindsey-(3) page 415 conversion:
+# tail/alpha and location stay the same
+a3 <- a
+d3 <- d 
+# the others require calcs:
+DEL2 <- cos(pi/2 * a)^2 + (-b)^2*sin(pi/2 * a)^2
+DEL <- sqrt(DEL2) * sign(1-a)
+eta_a <- min(a, 2-a)
+# the lindsey-(3) beta:
+b3 <- 2/(pi*eta_a)*acos( cos(pi/2 * a) / DEL )
+# the lindsey-(3) scale:
+c3 <- ( (DEL*c^a) / cos(pi/2 * a) )^(1/a)
+
+    stable::pstable(q, tail =a, skew=b3, disp =c3, loc  =d)
+#> [1] 0.1154242
+stabledist::pstable(q, alpha=a, beta=b , gamma=c , delta=d, pm=1)
 #> [1] 0.1138462
 rmutil::plevy(q, m=d, s=c)
 #> [1] 0.1138463
+
+# more accuracy!!!!?!
+    stable::pstable(q, tail =a, skew=b3, disp =c3, loc  =d, eps = 0.13*1e-7)
+#> [1] 0.1138786
 ```
 
-levy pdf (not working as expected...)
--------------------------------------
+levy pdf
+--------
 
 ``` r
 q <-  0.9
+
+# nolan pm=1 parameters:
 a <-  0.5
 b <-  1
 c <-  .25
 d <-  0.8
-    stable::dstable(q, tail =a, skew=b, disp =c, loc  =d)
-#> [1] 2.387435
-stabledist::dstable(q, alpha=a, beta=b, gamma=c, delta=d, pm=1)
+
+# lindsey-(3) page 415 conversion:
+# tail/alpha and location stay the same
+a3 <- a
+d3 <- d 
+# the others require calcs:
+DEL2 <- cos(pi/2 * a)^2 + (-b)^2*sin(pi/2 * a)^2
+DEL <- sqrt(DEL2) * sign(1-a)
+eta_a <- min(a, 2-a)
+# the lindsey-(3) beta:
+b3 <- 2/(pi*eta_a)*acos( cos(pi/2 * a) / DEL )
+# the lindsey-(3) scale:
+c3 <- ( (DEL*c^a) / cos(pi/2 * a) )^(1/a)
+
+    stable::dstable(q, tail =a, skew=b3, disp =c3, loc  =d)
+#> [1] 1.806389
+stabledist::dstable(q, alpha=a, beta=b , gamma=c , delta=d, pm=1)
 #> Warning in uniroot(function(th) log(g(th)), lower = l.th, upper = u.th, : -
 #> Inf replaced by maximally negative value
 
@@ -75,18 +126,34 @@ rmutil::dlevy(q, m=d, s=c)
 #> [1] 1.807224
 ```
 
-levy quantile (not working as expected...)
-------------------------------------------
+levy quantile
+-------------
 
 ``` r
 p <-  .3
+
+# nolan pm=1 parameters:
 a <-  0.5
 b <-  1
 c <-  .25
 d <-  0.8
-    stable::qstable(p, tail =a, skew=b, disp =c, loc  =d)
-#> [1] 0.9156615
-stabledist::qstable(p, alpha=a, beta=b, gamma=c, delta=d, pm=1)
+
+# lindsey-(3) page 415 conversion:
+# tail/alpha and location stay the same
+a3 <- a
+d3 <- d 
+# the others require calcs:
+DEL2 <- cos(pi/2 * a)^2 + (-b)^2*sin(pi/2 * a)^2
+DEL <- sqrt(DEL2) * sign(1-a)
+eta_a <- min(a, 2-a)
+# the lindsey-(3) beta:
+b3 <- 2/(pi*eta_a)*acos( cos(pi/2 * a) / DEL )
+# the lindsey-(3) scale:
+c3 <- ( (DEL*c^a) / cos(pi/2 * a) )^(1/a)
+
+    stable::qstable(p, tail =a, skew=b3, disp =c3, loc  =d)
+#> [1] 1.031301
+stabledist::qstable(p, alpha=a, beta=b , gamma=c , delta=d, pm=1)
 #> [1] 1.032735
 rmutil::qlevy(p, m=d, s=c)
 #> [1] 1.032733
@@ -97,29 +164,64 @@ play with alpha not 2 and not 1
 
 ``` r
 q <- -1.97
+
+# nolan pm=1 parameters:
 a <-  0.8
 b <-  0
 c <-  1
 d <-  0
-    stable::pstable(q, tail =a, skew=b, disp =c, loc  =d)
+
+# lindsey-(3) page 415 conversion:
+# tail/alpha and location stay the same
+a3 <- a
+d3 <- d 
+# the others require calcs:
+DEL2 <- cos(pi/2 * a)^2 + (-b)^2*sin(pi/2 * a)^2
+DEL <- sqrt(DEL2) * sign(1-a)
+eta_a <- min(a, 2-a)
+# the lindsey-(3) beta:
+b3 <- 2/(pi*eta_a)*acos( cos(pi/2 * a) / DEL )
+# the lindsey-(3) scale:
+c3 <- ( (DEL*c^a) / cos(pi/2 * a) )^(1/a)
+
+    stable::pstable(q, tail =a, skew=b3, disp =c3, loc  =d)
 #> [1] 0.1722953
-stabledist::pstable(q, alpha=a, beta=b, gamma=c, delta=d)
+stabledist::pstable(q, alpha=a, beta=b , gamma=c , delta=d)
 #> [1] 0.1722945
 ```
-
-Notice when a=1 or a=2, it just uses \[d/p/q/r\]cauchy or \[d/p/q/r\]norm respectively, so they match up. And when b=0 and a != 1 or a!=2, the results seem to match up. Something going on with skew parameterization; consult two pdfs in repo above.
 
 play with skew
 --------------
 
 ``` r
-q <- -1.97
+q <- -1
+
+# nolan pm=1 parameters:
 a <-  1.3
 b <-  -.4
 c <-  2
 d <-  0
-    stable::pstable(q, tail =a, skew=-b, disp =c^(a), loc  =d, eps=1.0e-12)
-#> [1] 0.2193218
-stabledist::pstable(q, alpha=a, beta=b, gamma=c, delta=d, pm=1)
-#> [1] 0.1844804
+
+# lindsey-(3) page 415 conversion:
+# tail/alpha and location stay the same
+a3 <- a
+d3 <- d 
+# the others require calcs:
+DEL2 <- cos(pi/2 * a)^2 + (-b)^2*sin(pi/2 * a)^2
+DEL <- sqrt(DEL2) * sign(1-a)
+eta_a <- min(a, 2-a)
+# the lindsey-(3) beta:
+b3 <- 2/(pi*eta_a)*acos( cos(pi/2 * a) / DEL )
+# the lindsey-(3) scale:
+c3 <- ( (DEL*c^a) / cos(pi/2 * a) )^(1/a)
+
+    stable::pstable(q, tail =a, skew=b3, disp =c3, loc  =d)
+#> [1] 0.2461677
+stabledist::pstable(q, alpha=a, beta=b , gamma=c , delta=d, pm=1)
+#> [1] 0.2461875
+
+    stable::dstable(q, tail =a, skew=b3, disp =c3, loc  =d)
+#> [1] 0.07589767
+stabledist::dstable(q, alpha=a, beta=b , gamma=c , delta=d, pm=1)
+#> [1] 0.07589773
 ```
