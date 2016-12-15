@@ -34,8 +34,8 @@ stabledist::pstable(q, alpha=1, beta=0, gamma=1, delta=0)
 #> [1] 0.8975836
 ```
 
-levy
-----
+levy cdf (not working as expected...)
+-------------------------------------
 
 ``` r
 q <-  0.9
@@ -49,6 +49,47 @@ stabledist::pstable(q, alpha=a, beta=b, gamma=c, delta=d, pm=1)
 #> [1] 0.1138462
 rmutil::plevy(q, m=d, s=c)
 #> [1] 0.1138463
+```
+
+levy pdf (not working as expected...)
+-------------------------------------
+
+``` r
+q <-  0.9
+a <-  0.5
+b <-  1
+c <-  .25
+d <-  0.8
+    stable::dstable(q, tail =a, skew=b, disp =c, loc  =d)
+#> [1] 2.387435
+stabledist::dstable(q, alpha=a, beta=b, gamma=c, delta=d, pm=1)
+#> Warning in uniroot(function(th) log(g(th)), lower = l.th, upper = u.th, : -
+#> Inf replaced by maximally negative value
+
+#> Warning in uniroot(function(th) log(g(th)), lower = l.th, upper = u.th, : -
+#> Inf replaced by maximally negative value
+#> Warning in .integrate2(g1, lower = a, upper = b, subdivisions =
+#> subdivisions, : roundoff error is detected in the extrapolation table
+#> [1] 1.807224
+rmutil::dlevy(q, m=d, s=c)
+#> [1] 1.807224
+```
+
+levy quantile (not working as expected...)
+------------------------------------------
+
+``` r
+p <-  .3
+a <-  0.5
+b <-  1
+c <-  .25
+d <-  0.8
+    stable::qstable(p, tail =a, skew=b, disp =c, loc  =d)
+#> [1] 0.9156615
+stabledist::qstable(p, alpha=a, beta=b, gamma=c, delta=d, pm=1)
+#> [1] 1.032735
+rmutil::qlevy(p, m=d, s=c)
+#> [1] 1.032733
 ```
 
 play with alpha not 2 and not 1
@@ -65,6 +106,8 @@ d <-  0
 stabledist::pstable(q, alpha=a, beta=b, gamma=c, delta=d)
 #> [1] 0.1722945
 ```
+
+Notice when a=1 or a=2, it just uses \[d/p/q/r\]cauchy or \[d/p/q/r\]norm respectively, so they match up. And when b=0 and a != 1 or a!=2, the results seem to match up. Something going on with skew parameterization; consult two pdfs in repo above.
 
 play with skew
 --------------
