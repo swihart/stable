@@ -1,5 +1,5 @@
 Package: stable
-Version: 1.1.1
+Version: 1.1.2
 Title: Probability Functions and Generalized Regression Models for Stable
     Distributions
 Authors@R: c(
