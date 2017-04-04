@@ -7,6 +7,7 @@ Authors@R: c(
     person("Jim"  , "Lindsey", email="jlindsey@gen.unimaas.nl", role="aut", comment="Jim created this package, Bruce is maintaining the CRAN version"),
     person("Philippe", "Lambert", email="phlambert@stat.ucl.ac.be", role="aut")
     )
+Imports: stabledist    
 Depends:
     R (>= 1.4),
     rmutil
@@ -16,7 +17,7 @@ Description: Density, distribution, quantile and hazard functions of a
     to those of 'stabledist'. See github for Journal article.
 License: GPL (>= 2)
 URL: http://www.commanster.eu/rcode.html
-BugReports: https:/github.com/swihart/stable/issues
+BugReports: https://github.com/swihart/stable/issues
 Encoding: UTF-8
 LazyData: true
 LazyLoad: true
