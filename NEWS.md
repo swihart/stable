@@ -1,4 +1,14 @@
 #------------------------------------------------------------------------------
+#version 1.1.3
+#------------------------------------------------------------------------------
+
+  * Added functions `sd2s()`, `s2sd()`, `pm1_to_pm0`, `pm0_to_pm1` to help
+  with switching between parameterizations
+  * Updated README to detail how to use `sd2s()`, `s2sd()`, `pm1_to_pm0`, `pm0_to_pm1`
+  * Updated README to detail how to locate modes with `stable` and `stabledist` equivalently
+
+
+#------------------------------------------------------------------------------
 #version 1.1.2
 #------------------------------------------------------------------------------
 
