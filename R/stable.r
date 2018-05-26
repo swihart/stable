@@ -125,7 +125,7 @@ pstable <- function(q, loc=0,disp=1/sqrt(2),skew=0,tail=2,eps=1.0e-6){
 	if(any(ctail2)){
 		res[ctail2] <- pnorm(yy[ctail2],0,sqrt(2))
 		ly <- ly-sum(ctail2)}
-	if(ly>0)res[!ctail1&!ctail2] <- .C("pstable",
+	if(ly>0)res[!ctail1&!ctail2] <- .C("pstable_c",
 		as.integer(ly),
 		as.double(yy[!ctail1&!ctail2]),
 		as.double(skew[!ctail1&!ctail2]),
@@ -143,7 +143,7 @@ pstable <- function(q, loc=0,disp=1/sqrt(2),skew=0,tail=2,eps=1.0e-6){
 #' @export
 qstable <- function(p, loc=0, disp=1/sqrt(2), skew=0, tail=2, eps=1.0e-6){
   q <- p
-	h <- function(y).C("pstable",
+	h <- function(y).C("pstable_c",
 		as.integer(1),
 		as.double((y-loc[i])/disp[i]),
 		as.double(skew[i]),
@@ -907,7 +907,7 @@ llikstable <- function(p){  # ,up=up,integration=integration) {
 
 	if(!censor){
 		if(exact){
-			tamp <- .C("pstable",
+			tamp <- .C("pstable_c",
 				as.integer(ly),
 				yy=as.double((y+delta/2-loc)/disp),
 				skew=as.double(skew+z0),
@@ -915,7 +915,7 @@ llikstable <- function(p){  # ,up=up,integration=integration) {
 				as.double(eps),
 				err=integer(1),
 				ffy=double(ly))$ffy-
-				.C("pstable",
+				.C("pstable_c",
 				as.integer(ly),
 				yy=as.double((y-delta/2-loc)/disp),
 				skew=as.double(skew+z0),
@@ -941,7 +941,7 @@ llikstable <- function(p){  # ,up=up,integration=integration) {
 			llikcomp <- -(log(tamp)+log(delta))*weights}}
 	else {
 		if(exact){
-			p1 <- .C("pstable",
+			p1 <- .C("pstable_c",
 				as.integer(ly),
 				yy=as.double((y+delta/2-loc)/disp),
 				skew=as.double(skew+z0),
@@ -950,7 +950,7 @@ llikstable <- function(p){  # ,up=up,integration=integration) {
 				err=integer(1),
 				ffy=double(ly),
 				PACKAGE="stable")$ffy
-			ps <- .C("pstable",
+			ps <- .C("pstable_c",
 				as.integer(ly),
 				yy=as.double((y-delta/2-loc)/disp),
 				skew=as.double(skew+z0),
@@ -975,7 +975,7 @@ llikstable <- function(p){  # ,up=up,integration=integration) {
 				PACKAGE="stable")$ffy/disp
 			llikcomp <- -weights*(cc*(log(tamp)+log(delta))
 				+log(lc-rc*
-				.C("pstable",
+				.C("pstable_c",
 				as.integer(ly),
 				yy=as.double((y-loc)/disp),
 				skew=as.double(skew+z0),

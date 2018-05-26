@@ -6,6 +6,7 @@
   with switching between parameterizations
   * Updated README to detail how to use `sd2s()`, `s2sd()`, `pm1_to_pm0`, `pm0_to_pm1`
   * Updated README to detail how to locate modes with `stable` and `stabledist` equivalently
+  * FIXED NOTE: Found no calls to: ‘R_registerRoutines’, ‘R_useDynamicSymbols’. 
 
 
 #------------------------------------------------------------------------------

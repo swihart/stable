@@ -20,7 +20,7 @@
  *
  *  void stable(int *n, double *y, double *beta, double *alpha, int *npt,
  *	    double *up, double *eps, int *type, int *err, double *ffy)
- *  void pstable(int *n, double *y, double *beta, double *alpha,
+ *  void pstable_c(int *n, double *y, double *beta, double *alpha,
  *	    double *eps, int *err, double *ffy)
  *
  *  DESCRIPTION
@@ -183,7 +183,7 @@ void stable(int *n, double *y, double *beta, double *alpha, int *npt,
       ffy[i]=(romberg(fcn1, *eps)+romberg(fcn2, *eps))/M_PI;}}}
 
 /* cdf of a stable distribution */
-void pstable(int *n, double *y, double *beta, double *alpha,
+void pstable_c(int *n, double *y, double *beta, double *alpha,
 	     double *eps, int *err, double *ffy)
 {
   int i;

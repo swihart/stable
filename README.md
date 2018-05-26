@@ -314,18 +314,13 @@ c1*stabledist::stableMode(alpha=a1, beta=b1)+d0
 
 xran <- seq(-2.5,2.6,0.001)
 ysd <- stabledist::dstable(xran, alpha=a1, beta=b1, gamma=c1, delta=d1, pm=1)
-plot(xran, ysd)
+#plot(xran, ysd)
 
 xran[ysd == max(ysd)]
 #> [1] -1.133
 
 ys <- stable::dstable(xran, tail = s$tail, skew=s$skew, disp = s$disp, loc  = s$loc)
-points(xran, ys, col="blue")
-```
-
-![](README-unnamed-chunk-11-1.png)
-
-``` r
+#points(xran, ys, col="blue")
 
 xran[ys == max(ys)]
 #> [1] -1.133

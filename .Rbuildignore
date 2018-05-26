@@ -2,6 +2,7 @@
 ^\.Rproj\.user$
 ^README\.Rmd$
 ^README-.*\.png$
+^README\.HTML$
 ^cran-comments\.md$
 ^\.travis\.yml$
 ^LambertLindsey1999JRSSC\.pdf$
