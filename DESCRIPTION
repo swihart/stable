@@ -1,5 +1,5 @@
 Package: stable
-Version: 1.1.3
+Version: 1.1.4
 Title: Probability Functions and Generalized Regression Models for Stable
     Distributions
 Authors@R: c(
@@ -21,4 +21,4 @@ BugReports: https://github.com/swihart/stable/issues
 Encoding: UTF-8
 LazyData: true
 LazyLoad: true
-RoxygenNote: 5.0.1
+RoxygenNote: 6.1.0

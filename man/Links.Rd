@@ -2,10 +2,10 @@
 % Please edit documentation in R/stable.r
 \name{Links}
 \alias{Links}
-\alias{disp_g}
-\alias{disp_h}
 \alias{loc_g}
 \alias{loc_h}
+\alias{disp_g}
+\alias{disp_h}
 \alias{skew_g}
 \alias{skew_h}
 \alias{tail_g}
@@ -34,4 +34,3 @@ tail_h(x)
 \description{
 Link and inverse functions for use in stablereg
 }
-

@@ -55,10 +55,6 @@ fxhat <- dstable(xhat,loc=0,disp=1,skew=-1,tail=1.5)
 lines(c(xhat,xhat),c(0,fxhat),lty="dotted")
 
 }
-\author{
-Philippe Lambert (Catholic University of Louvain, Belgium,
-\email{phlambert@stat.ucl.ac.be}) and Jim Lindsey.
-}
 \references{
 Lambert, P. and Lindsey, J.K. (1999) Analysing financial returns
 using regression models based on non-symmetric stable distributions. Applied
@@ -71,5 +67,8 @@ distribution.
 \code{stablereg} to fit generalized linear models for the
 stable distribution parameters.
 }
+\author{
+Philippe Lambert (Catholic University of Louvain, Belgium,
+\email{phlambert@stat.ucl.ac.be}) and Jim Lindsey.
+}
 \keyword{distribution}
-

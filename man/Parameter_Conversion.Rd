@@ -2,8 +2,8 @@
 % Please edit documentation in R/sd2s_and_s2sd.R
 \name{Parameter_Conversion}
 \alias{Parameter_Conversion}
-\alias{s2sd}
 \alias{sd2s}
+\alias{s2sd}
 \title{Easy conversion of parameters between stabledist and stable}
 \usage{
 sd2s(alpha, beta, gamma, delta, pm = 1)
@@ -55,4 +55,3 @@ stabledist::pstable(q, alpha=a, beta=b , gamma=c , delta=d, pm=1)
 sd <- s2sd(tail = s$tail, skew=s$skew, disp = s$disp, loc  = s$loc)
 stabledist::pstable(q, alpha=sd$alpha, beta=sd$beta , gamma=sd$gamma , delta=sd$delta, pm=1)
 }
-

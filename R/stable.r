@@ -1,4 +1,80 @@
-#
+#' Stable Distribution
+#'
+#'These functions provide information about the stable distribution
+#'with the location, the dispersion, the skewness and the tail thickness
+#'respectively modelled by the parameters \code{loc}, \code{disp},
+#'\code{skew} and  \code{tail}.
+#'
+#'\code{dstable}, \code{pstable}, \code{qstable} and \code{hstable}
+#'compute the density, the distribution, the quantile and the hazard functions
+#'of a stable variate. \code{rstable} generates random deviates with
+#'the prescribed stable distribution.
+#'
+#'\code{loc} is a location parameter in the same way as the mean
+#'in the normal distribution: it can take any real value.
+#'
+#'\code{disp} is a dispersion parameter in the same way as the standard
+#'deviation in the normal distribution: it can take any positive value.
+#'
+#'\code{skew} is a skewness parameter: it can take any value in \eqn{(-1,1)}.
+#'The distribution is right-skewed, symmetric and left-skewed
+#'when \code{skew} is negative, null or positive respectively.
+#'
+#'\code{tail} is a tail parameter (often named the characteristic exponent):
+#'  it can take any value in \eqn{(0,2)} (with \code{tail=1} and \code{tail=2}
+#'                                        yielding the Cauchy and the normal distributions respectively
+#'                                        when symmetry holds).
+#'
+#'If \code{loc}, \code{disp}, \code{skew}, or \code{tail} are not
+#'specified they assume the default values of \eqn{0}, \eqn{1/sqrt(2)},
+#'\eqn{0} and \eqn{2} respectively. This corresponds to a normal
+#'variate with mean\eqn{=0} and variance\eqn{=1/2 disp^2}.
+#'
+#'The stable characteristic function is given by
+#'\deqn{greekphi(t) = i loca t - disp {|t|}^{tail}  [1+i skew sign(t) greekomega(t,tail)]}{phi(t) = i loc t - disp |t|^tail [1+i skew sign(t) omega(t,tail)]}
+#'where
+#'\deqn{greekomega(t,tail) = \frac{2}{\pi} LOG(ABS(t))}{omega(t,tail) = (2/pi) log|t|}
+#'when \code{tail=1}, and
+#'\deqn{greekomega(t,tail) = tan(\frac{\pi tail}{2})}{omega(t,tail) = tan(pi alpha / 2)}
+#'otherwise.
+#'
+#'The characteristic function is inverted using Fourier's transform
+#'to obtain the corresponding stable density. This inversion requires the
+#'numerical evaluation of an integral from \eqn{0} to \eqn{\infty}{infinity}.
+#'Two algorithms
+#'are proposed for this. The default is Romberg's method
+#'(\code{integration}="Romberg") which is used to evaluate the integral
+#'with an error bounded by \code{eps}.
+#'The alternative method is Simpson's integration
+#'(\code{integration}="Simpson"): it approximates the
+#'integral from \eqn{0} to \eqn{\infty}{infinity} by an integral
+#'from \eqn{0} to \code{up}
+#'with \code{npt} points subdividing \eqn{(O, up)}.
+#'These three extra arguments -- \code{integration}, \code{up} and
+#'\code{npt} -- are only available when using \code{dstable}.
+#'The other functions are all based on Romberg's algorithm.
+#'
+#' @param x,q vector of quantiles.
+#' @param p vector of probabilites.
+#' @param n number of observations.
+#' @param loc vector of (real) location parameters.
+#' @param disp vector of (positive) dispersion parameters.
+#' @param skew vector of skewness parameters (in [-1,1]).
+#' @param tail vector of parameters (in [0,2]) related to the tail thickness.
+#' @param eps scalar giving the required precision in computation.
+#' @param npt,up,integration As detailed herein -- only available when using \code{dstable}.
+#'
+#' @references Lambert, P. and Lindsey, J.K. (1999) Analysing financial returns using
+#' regression models based on non-symmetric stable distributions. Applied
+#' Statistics, 48, 409-424.
+#'
+#' @seealso \code{\link[stable]{stablereg}} to fit generalized nonlinear regression models
+#' for the stable distribution parameters.
+#'
+#' @author Philippe Lambert (Catholic University of Louvain, Belgium, \email{phlambert@stat.ucl.ac.be})
+#' @author Jim Lindsey
+#'
+#'
 #  stable : A Library of Functions for Stable Distributions
 #  Copyright (C) 1998, 1999, 2000, 2001 P. Lambert and J.K. Lindsey
 #
@@ -26,7 +102,7 @@
 #     qstable(q, loc=0, disp=1/sqrt(2), skew=0, tail=2, eps=1.0e-6)
 #     rstable(n=1,loc=0,disp=1/sqrt(2),skew=0,tail=2,eps=1.0e-6)
 #     hstable(y, loc=0,disp=1/sqrt(2),skew=0,tail=2,eps=1.0e-6)
-#     stablereg(y=NULL, loc=0, disp=1, skew=0, tail=1.5, 
+#     stablereg(y=NULL, loc=0, disp=1, skew=0, tail=1.5,
 #		oloc=TRUE, odisp=TRUE, oskew=TRUE, otail=TRUE, noopt=FALSE,
 #		iloc=NULL, idisp=NULL,iskew=NULL, itail=NULL,
 #		loc_h=NULL, disp_h=NULL, skew_h=NULL, tail_h=NULL,
@@ -55,6 +131,35 @@
 # using the Simpson's method with npt points or Romberg's integration
 #' @describeIn stable density
 #' @export
+#' @examples
+#' par(mfrow=c(2,2))
+#' x <- seq(-5,5,by=0.1)
+#'
+#' # Influence of loc (location)
+#' plot(x,dstable(x,loc=-2,disp=1/sqrt(2),skew=-0.8,tail=1.5),
+#'   type="l",ylab="",main="Varying LOCation")
+#' lines(x,dstable(x,loc=0,disp=1/sqrt(2),skew=-0.8,tail=1.5))
+#' lines(x,dstable(x,loc=2,disp=1/sqrt(2),skew=-0.8,tail=1.5))
+#'
+#' # Influence of disp (dispersion)
+#' plot(x,dstable(x,loc=0,disp=0.5,skew=0,tail=1.5),
+#'   type="l",ylab="",main="Varying DISPersion")
+#' lines(x,dstable(x,loc=0,disp=1/sqrt(2),skew=0,tail=1.5))
+#' lines(x,dstable(x,loc=0,disp=0.9,skew=0,tail=1.5))
+#'
+#' # Influence of skew (skewness)
+#' plot(x,dstable(x,loc=0,disp=1/sqrt(2),skew=-0.8,tail=1.5),
+#'   type="l",ylab="",main="Varying SKEWness")
+#' lines(x,dstable(x,loc=0,disp=1/sqrt(2),skew=0,tail=1.5))
+#' lines(x,dstable(x,loc=0,disp=1/sqrt(2),skew=0.8,tail=1.5))
+#'
+#' # Influence of tail (tail)
+#' plot(x,dstable(x,loc=0,disp=1/sqrt(2),skew=0,tail=0.8),
+#'   type="l",ylab="",main="Varying TAIL thickness")
+#' lines(x,dstable(x,loc=0,disp=1/sqrt(2),skew=0,tail=1.5))
+#' lines(x,dstable(x,loc=0,disp=1/sqrt(2),skew=0,tail=2))
+#'
+#' stabledist::dstable(x=1, 1, 0)
 dstable <- function(x, loc=0, disp=1/sqrt(2), skew=0, tail=2,
 		npt=501, up=10, eps=1.0e-6, integration="Romberg"){
   y<-x
@@ -85,7 +190,7 @@ dstable <- function(x, loc=0, disp=1/sqrt(2), skew=0, tail=2,
 		as.integer(ly),
 		as.double(yy[!ctail1&!ctail2]),
 		as.double(skew[!ctail1&!ctail2]),
-		as.double(tail[!ctail1&!ctail2]), 
+		as.double(tail[!ctail1&!ctail2]),
 		as.integer(npt),
 		as.double(up),
 		as.double(eps),
@@ -147,7 +252,7 @@ qstable <- function(p, loc=0, disp=1/sqrt(2), skew=0, tail=2, eps=1.0e-6){
 		as.integer(1),
 		as.double((y-loc[i])/disp[i]),
 		as.double(skew[i]),
-		as.double(tail[i]), 
+		as.double(tail[i]),
 		as.double(eps),
 		err=integer(1),
 		ffy=double(1),
@@ -224,60 +329,60 @@ hstable <- function(x, loc=0,disp=1/sqrt(2),skew=0,tail=2,eps=1.0e-6){
 # Link and inverse link functions for use in stablereg
 
 #' Links
-#' 
+#'
 #' Link and inverse functions for use in stablereg
-#' 
+#'
 #' @name Links
 #' @aliases loc_g loc_h disp_g disp_h skew_g skew_h tail_g tail_h
 #' @param x the function argument
 #' @rdname Links
 #' @export loc_g
-loc_g <- function(x) x 
+loc_g <- function(x) x
 #' @rdname Links
 #' @export loc_h
 loc_h <- function(x) x
 #' @rdname Links
 #' @export disp_g
-disp_g <- function(x) log(x) 
+disp_g <- function(x) log(x)
 #' @rdname Links
 #' @export disp_h
-disp_h <- function(x) exp(x) 
+disp_h <- function(x) exp(x)
 #' @rdname Links
 #' @export skew_g
-skew_g <- function(x) log((1+x)/(1-x)) 
+skew_g <- function(x) log((1+x)/(1-x))
 #' @rdname Links
 #' @export skew_h
-skew_h <- function(x) 2/(1+exp(-x))-1  
+skew_h <- function(x) 2/(1+exp(-x))-1
 #' @rdname Links
 #' @export tail_g
 tail_g <- function(x) log(x/(2-x))
 #' @rdname Links
 #' @export tail_h
-tail_h <- function(x) 2/(1+exp(-x)) 
+tail_h <- function(x) 2/(1+exp(-x))
 
 ###########################################################################
-# Regression models for the four parameters in the stable distribution 
+# Regression models for the four parameters in the stable distribution
 # Note that the returned optimized parameters are on the normalized
 # scale, i.e. that they have to be transformed back to the right scale.
 
 
 
 #' Stable Generalized Regression Models
-#' 
+#'
 #' \code{stablereg} fits user specified generalized linear and nonlinear
 #' regression models based on the stable distribution to (uncensored, right
 #' and/or left censored) data. This allows the location, the dispersion, the
 #' skewness and the tails of the fitted stable distribution to vary with
 #' explanatory variables.
-#' 
-#' 
+#'
+#'
 #' @aliases stablereg fitted.stable df.residual.stable deviance.stable
 #' aic.stable
 #' @param y The response vector or a \code{repeated} data object. If the
 #' \code{repeated} data object contains more than one response variable, give
 #' that object in \code{envir} and give the name of the response variable to be
 #' used here.
-#' 
+#'
 #' For censored data, two columns with the second being the censoring indicator
 #' (1: uncensored, 0: right censored, -1: left censored.)
 #' @param loc,loc_h,oloc,iloc Describe the regression model fitted for the
@@ -285,39 +390,39 @@ tail_h <- function(x) 2/(1+exp(-x))
 #' by the link function \code{loc_g} (set to the identity by default. The
 #' inverse link function is denoted by \code{loc_h}. Note that these functions
 #' cannot contain unknown parameters).
-#' 
+#'
 #' Two specifications are possible:
-#' 
+#'
 #' (1) \code{loc} is a linear or nonlinear language expression beginning with ~
 #' or an R function, describing the regression function for the location
 #' parameter (after transformation by \code{loc_g}, the link function).
-#' 
+#'
 #' \code{iloc} is a vector of initial conditions for the parameters in the
 #' regression for this parameter.
-#' 
+#'
 #' \code{oloc} is a boolean indicating if an optimization of the likelihood has
 #' to be carried out on these parameters. If \code{oloc} is set to TRUE, a
 #' default zero value is considered for the starting values \code{iloc}. But if
 #' no optimization is desired on the location parameters, i.e. when the
 #' likelihood has to be evaluated or optimized at a fixed location, then
 #' \code{iloc} has to be explicitely specified.
-#' 
+#'
 #' (2) \code{loc} is a numeric expression (i.e. a scalar or a vector of the
 #' same size as the data vector \code{y}, or \code{y[,1]} when censoring is
 #' considered).
-#' 
+#'
 #' If \code{oloc} is set to TRUE, i.e. when an optimization of the likelihood
 #' has to be carried out on the location parameter, then the location parameter
 #' (after transformation by the link function loc_g) is set to an unknown
 #' parameter with initial value equal to \code{iloc[1]} or \code{loc[1]} when
 #' \code{iloc} is not specified.
-#' 
+#'
 #' But when \code{oloc} is set to FALSE, i.e. when the likelihood has to be
 #' evaluated or optimized at a fixed location, then the transformed location is
 #' assumed to be equal to \code{loc} when it is of the same length as the data
 #' vector \code{y} (or \code{y[,1]} when censoring is considered), and to
 #' \code{loc[1]} otherwise.
-#' 
+#'
 #' Specification (1) is especially useful in ANOVA-like situations where the
 #' location is assumed to change with the levels of some factor variable.
 #' @param disp,disp_h,odisp,idisp describe the regression model for the
@@ -392,57 +497,57 @@ tail_h <- function(x) 2/(1+exp(-x))
 #' Statistics 48, 409-424.
 #' @keywords models
 #' @examples
-#' 
+#'
 #' ## Share return over a 50 day period (see reference above)
 #' # shares
 #' y <- c(296,296,300,302,300,304,303,299,293,294,294,293,295,287,288,297,
 #' 305,307,307,304,303,304,304,309,309,309,307,306,304,300,296,301,298,
-#' 295,295,293,292,297,294,293,306,303,301,303,308,305,302,301,297,299)  
-#' 
+#' 295,295,293,292,297,294,293,306,303,301,303,308,305,302,301,297,299)
+#'
 #' # returns
 #' ret <- (y[2:50]-y[1:49])/y[1:49]
 #' # hist(ret, breaks=seq(-0.035,0.045,0.01))
-#' 
+#'
 #' day <- seq(0,0.48,by=0.01) # time measured in days/100
 #' x <- seq(1,length(ret))-1
-#' 
+#'
 #' # Classic stationary normal model tail=2
 #' print(z1 <- stablereg(y = ret, delta = 1/y[1:49],
 #' 	loc = ~1, disp= ~1, skew = ~1, tail = tail_g(1.9999999),
 #' 	iloc = 0, idisp = -3, iskew = 0, oskew = FALSE, otail = FALSE))
-#' 
+#'
 #' # Normal model (tail=2) with dispersion=disp_h(b0+b1*day)
 #' print(z2 <- stablereg(y = ret, delta = 1/y[1:49], loc = ~day,
 #' 	disp = ~1, skew = ~1, tail = tail_g(1.999999), iloc = c(0.003,0),
 #' 	idisp = -4.5, iskew = 0, oskew = FALSE, otail = FALSE))
-#' 
+#'
 #' # Stable model with loc(ation)=loc_h(b0+b1*day)
 #' print(z3 <- stablereg(y = ret, delta = 1/y[1:49],
 #' 	loc = ~day, disp = ~1, skew = ~1, tail = ~1,
 #' 	iloc = c(0.001,-0.004), idisp = -4.8, iskew = 0, itail = 0.6))
-#' 
+#'
 #' # Stable model with disp(ersion)=disp_h(b0+b1*day)
 #' print(z4 <- stablereg(y = ret, delta = 1/y[1:49],
 #' 	loc = ~1, disp = ~day, skew = ~1, tail = ~1,
 #' 	iloc = 0.003, idisp = c(-4.8,0), iskew = -0.03, itail = 1.6))
-#' 
+#'
 #' # Stable model with skew(ness)=skew_h(b0+b1*day)
 #' # Evaluation at fixed parameter values (because noopt is set to TRUE)
 #' print(z5 <- stablereg(y = ret, delta = 1/y[1:49],
 #' 	loc = ~1, disp = ~1, skew = ~day, tail = ~1,
 #' 	iloc = 5.557e-04, idisp = -4.957, iskew = c(2.811,-2.158),
 #' 	itail = 1.57, noopt=TRUE))
-#' 
+#'
 #' # Stable model with tail=tail_h(b0+b1*day)
 #' print(z6 <- stablereg(y = ret, delta = 1/y[1:49], loc = ret ~ 1,
 #' 	disp = ~1, skew = ~1, tail = ~day, iloc = 0.002,
 #' 	idisp = -4.8, iskew = -2, itail = c(2.4,-4), hessian=FALSE))
-#' 
+#'
 #' @importFrom stats dcauchy dnorm nlm pcauchy pnorm qcauchy qnorm runif uniroot
 #' @import  rmutil
 #' @useDynLib stable
 #' @export
-stablereg <- function(y=NULL, loc=0, disp=1, skew=0, tail=1.5, 
+stablereg <- function(y=NULL, loc=0, disp=1, skew=0, tail=1.5,
 	oloc=TRUE, odisp=TRUE, oskew=TRUE, otail=TRUE, noopt=FALSE,
 	iloc=NULL, idisp=NULL,iskew=NULL, itail=NULL,
 	loc_h=NULL, disp_h=NULL, skew_h=NULL, tail_h=NULL,
@@ -601,7 +706,7 @@ if(length(weights)==1)weights <- rep(weights,n)
 
 # LOC
 # From the coming lines, we see that if one does not want to optimize over
-# loc (ie. oloc=FALSE), then there are 2 alternatives: 
+# loc (ie. oloc=FALSE), then there are 2 alternatives:
 # (1) set loc equal to a value identical for all units: use loc=<scalar>
 # (2) set loc equal to values varying through units: use loc=<language>
 #      and iloc=<corresponding vector of initial conditions>
@@ -679,8 +784,8 @@ else {
 # Note that we work with the disp_g link (log link by default).
 # This means that language description of the disp model and
 # initial conditions are understood on that scale!!
-# Non language description of disp are also understood on the disp_g scale 
-# and specified using disp=<value>, yielding disp_h(<value>) for the 
+# Non language description of disp are also understood on the disp_g scale
+# and specified using disp=<value>, yielding disp_h(<value>) for the
 # parameter disp.
 
 npl2 <- if(odisp)nploc*oloc+1 else 1
@@ -754,8 +859,8 @@ else {
 # Note that, y default, we work with the skew_g([.])=log{(1+[.])/(1-[.])} link.
 # This means that language description of the skew model and
 # the possible initial conditions are understood on that scale!!
-# Non language description of skew are also understood on the skew_g scale 
-# and specified using skew=<value>, yielding skew_h(<value>) for the 
+# Non language description of skew are also understood on the skew_g scale
+# and specified using skew=<value>, yielding skew_h(<value>) for the
 # parameter skew.
 
 npl3 <- if(oskew)nploc*oloc+npdisp*odisp+1 else 1
@@ -801,7 +906,7 @@ nlp <- if(is.function(skew1))length(attr(skew1,"parameters"))
 	else npt3
 if(!is.null(nlp)&&nlp!=npskew)
 	stop(paste("iskew should have",nlp,"initial estimates"))
-if(inherits(skew,"formula")||is.function(skew)){ 
+if(inherits(skew,"formula")||is.function(skew)){
 	if(oskew){
 		if(is.numeric(iskew) && length(iskew)!=npskew)
 			stop(paste("iskew must be of size ",npskew))
@@ -827,8 +932,8 @@ else {
 # Note that we work with the tail_g([.])=log{([.]-1)/(2-[.])} link.
 # This means that language description of the tail model and
 # the possible initial conditions are understood on that scale!!
-# Non language description of tail are also understood on the tail_g scale 
-# and specified using tail=<value>, yielding tail_h(<value>) for the 
+# Non language description of tail are also understood on the tail_g scale
+# and specified using tail=<value>, yielding tail_h(<value>) for the
 # parameter tail.
 
 npl4 <- if(otail)nploc*oloc+npdisp*odisp+npskew*oskew+1 else 1
@@ -997,7 +1102,7 @@ llikstable <- function(p){  # ,up=up,integration=integration) {
 		tail=tail)
 	z}
 
-# This function returns -llik (and NOT the deviance) to get the 
+# This function returns -llik (and NOT the deviance) to get the
 # correct s.e's with the hessian returned by nlm (optimization routine).
 optstable <- function(p){
 	tamp <- llikstable(p)$llik
@@ -1010,15 +1115,15 @@ if(oloc) {
 	p0 <- c(iloc)
 	names(p0) <- c(rep("iloc",length(iloc)))}
 if(odisp) {
-	tamp <- names(p0) 
+	tamp <- names(p0)
 	p0 <- c(p0,idisp)
 	names(p0) <- c(tamp,rep("idisp",length(idisp)))}
 if(oskew) {
-	tamp <- names(p0) 
+	tamp <- names(p0)
 	p0 <- c(p0,iskew)
 	names(p0) <- c(tamp,rep("iskew",length(iskew)))}
 if(otail) {
-	tamp <- names(p0) 
+	tamp <- names(p0)
 	p0 <- c(p0,itail)
 	names(p0) <- c(tamp,rep("itail",length(itail)))}
 if(llik.output) {
@@ -1038,14 +1143,14 @@ if(np0>0){
 		iterlim=iterlim, stepmax=stepmax)
 	z <- llikstable(p.opt$estimate)}
 else z <- llikstable(p0)
-  
-ytilde.tamp <- stable.mode(z$loc,z$disp,z$skew,z$tail)$ytilde  
-  # corresponding mode 
+
+ytilde.tamp <- stable.mode(z$loc,z$disp,z$skew,z$tail)$ytilde
+  # corresponding mode
 tamp <- dstable(x=ytilde.tamp, loc=z$loc, disp=z$disp, skew=z$skew,
 		tail=z$tail, npt=npoint, up=up, integration=integration)
 llik.ytilde <- -(log(tamp)+log(delta))*weights
 
-ytilde.tamp <- stable.mode(z$loc,z$disp,z$skew,z$tail)$ytilde  
+ytilde.tamp <- stable.mode(z$loc,z$disp,z$skew,z$tail)$ytilde
 
 np <- nploc+npdisp+npskew+nptail
 llik <- z$llik
@@ -1056,7 +1161,7 @@ loc <- as.vector(z$loc)
 disp <- as.vector(z$disp)
 skew <- as.vector(z$skew)
 tail <- as.vector(z$tail)
-ytilde <- stable.mode(loc,disp,skew,tail)$ytilde  # corresponding mode 
+ytilde <- stable.mode(loc,disp,skew,tail)$ytilde  # corresponding mode
 residuals <- as.vector((y-loc)/disp)
 
 if(!is.null(loc3))loc1 <- loc3
@@ -1096,7 +1201,7 @@ z1 <- list(
 	disp1=disp1,
 	skew1=skew1,
 	tail1=tail1,
-	ytilde=ytilde, 
+	ytilde=ytilde,
 	start=p0,
 	weights=weights,
 	llik=llik,
@@ -1132,7 +1237,7 @@ fitted.stable <- function(z) z$loc
 
 df.residual.stable <- function(z) z$df
 
-aic <- function (object, ...) 
+aic <- function (object, ...)
 	UseMethod("aic")
 aic.stable <- function(z) z$aic
 
@@ -1240,34 +1345,34 @@ if(!is.null(z$hessian)&&z$hessian&&np>1&&correlation){
 
 
 #' Mode of a Stable Distribution
-#' 
+#'
 #' This function gives a reliable approximation to the mode of a stable
 #' distribution with location, dispersion, skewness and tail thickness
 #' specified by the parameters \code{loc}, \code{disp}, \code{skew} and
 #' \code{tail}. \code{tail} must be in (1,2).
-#' 
+#'
 #' \code{loc} is a location parameter in the same way as the mean in the normal
 #' distribution: it can take any real value.
-#' 
+#'
 #' \code{disp} is a dispersion parameter in the same way as the standard
 #' deviation in the normal distribution: it can take any positive value.
-#' 
+#'
 #' \code{skew} is a skewness parameter: it can take any value in \eqn{(-1,1)}.
 #' The distribution is right-skewed, symmetric and left-skewed when \code{skew}
 #' is negative, null or positive respectively.
-#' 
+#'
 #' \code{tail} is a tail parameter (often named the characteristic exponent):
 #' it can take any value in \eqn{(0,2)} (with \code{tail=1} and \code{tail=2}
 #' yielding the Cauchy and the normal distributions respectively when symmetry
 #' holds).
-#' 
+#'
 #' The simplest empirical formula found to give a satisfactory approximation to
 #' the mode for values of \code{tail} in \eqn{(1,2)} is \deqn{
 #' loc+disp*a*skew*exp(-b*abs(skew))} with \deqn{ a =
 #' 1.7665114+1.8417675*tail-2.2954390*tail^2+0.4666749*tail^3} and \deqn{ b =
 #' -0.003142967+632.4715*tail*exp(-7.106035*tail)}.
-#' 
-#' 
+#'
+#'
 #' @param loc vector of (real) location parameters.
 #' @param disp vector of (positive) dispersion parameters.
 #' @param skew vector of skewness parameters (in [-1,1]).
@@ -1277,7 +1382,7 @@ if(!is.null(z$hessian)&&z$hessian&&np>1&&correlation){
 #' \email{phlambert@@stat.ucl.ac.be}) and Jim Lindsey.
 #' @seealso \code{stable} for more details on the stable
 #' distribution.
-#' 
+#'
 #' \code{stablereg} to fit generalized linear models for the
 #' stable distribution parameters.
 #' @references Lambert, P. and Lindsey, J.K. (1999) Analysing financial returns
@@ -1285,17 +1390,17 @@ if(!is.null(z$hessian)&&z$hessian&&np>1&&correlation){
 #' Statistics, 48, 409-424.
 #' @keywords distribution
 #' @examples
-#' 
+#'
 #' x <- seq(-5,5,by=0.1)
 #' plot(x,dstable(x,loc=0,disp=1,skew=-1,tail=1.5),type="l",ylab="f(x)")
 #' xhat <- stable.mode(loc=0,disp=1,skew=-1,tail=1.5)$ytilde
 #' fxhat <- dstable(xhat,loc=0,disp=1,skew=-1,tail=1.5)
 #' lines(c(xhat,xhat),c(0,fxhat),lty="dotted")
-#' 
+#'
 #' @export stable.mode
 stable.mode <- function(loc, disp, skew, tail){
 	if(any(tail<1))
-		warning("stable.mode is only reliable for tail in (1,2)") 
+		warning("stable.mode is only reliable for tail in (1,2)")
 	coef1 <- 1.7665114+1.8417675*tail-2.2954390*tail^2+0.4666749*tail^3
 	coef2 <- -0.003142967+632.4715*exp(-7.106035*tail)*tail
 	list(ytilde=loc+disp*coef1*exp(-coef2*abs(skew))*skew,
