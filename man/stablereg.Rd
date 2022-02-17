@@ -8,16 +8,44 @@
 \alias{aic.stable}
 \title{Stable Generalized Regression Models}
 \usage{
-stablereg(y = NULL, loc = 0, disp = 1, skew = 0, tail = 1.5,
-  oloc = TRUE, odisp = TRUE, oskew = TRUE, otail = TRUE,
-  noopt = FALSE, iloc = NULL, idisp = NULL, iskew = NULL,
-  itail = NULL, loc_h = NULL, disp_h = NULL, skew_h = NULL,
-  tail_h = NULL, weights = 1, exact = FALSE, delta = 1,
-  envir = parent.frame(), integration = "Romberg", eps = 1e-06,
-  up = 10, npoint = 501, hessian = TRUE, llik.output = FALSE,
-  print.level = 0, ndigit = 10, steptol = 1e-05, gradtol = 1e-05,
-  fscale = 1, typsize = abs(p0), stepmax = sqrt(p0 \%*\% p0),
-  iterlim = 100)
+stablereg(
+  y = NULL,
+  loc = 0,
+  disp = 1,
+  skew = 0,
+  tail = 1.5,
+  oloc = TRUE,
+  odisp = TRUE,
+  oskew = TRUE,
+  otail = TRUE,
+  noopt = FALSE,
+  iloc = NULL,
+  idisp = NULL,
+  iskew = NULL,
+  itail = NULL,
+  loc_h = NULL,
+  disp_h = NULL,
+  skew_h = NULL,
+  tail_h = NULL,
+  weights = 1,
+  exact = FALSE,
+  delta = 1,
+  envir = parent.frame(),
+  integration = "Romberg",
+  eps = 1e-06,
+  up = 10,
+  npoint = 501,
+  hessian = TRUE,
+  llik.output = FALSE,
+  print.level = 0,
+  ndigit = 10,
+  steptol = 1e-05,
+  gradtol = 1e-05,
+  fscale = 1,
+  typsize = abs(p0),
+  stepmax = sqrt(p0 \%*\% p0),
+  iterlim = 100
+)
 }
 \arguments{
 \item{y}{The response vector or a \code{repeated} data object. If the

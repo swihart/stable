@@ -1,12 +1,22 @@
-#' Easy conversion of parameters between stabledist and stable
+#' Easy conversion of parameters between stabledist (Nolan 1-parameterization) and stable (Lambert and Lindsey 1999)
 #'
-#' \code{sd2s} has stabledist parameter inputs and returns stable parameters.
-#' \code{s2sd} has stable     parameter inputs and returns stabledist parameters.
+#' \code{sd2s} has stabledist parameter (Nolan 1-parameterization) inputs and returns stable parameters as put forth in Lambert and Lindsey (1999) and used in this package.
+#' \code{s2sd} has stable     parameter (Lambert and Lindsey (1999)) inputs and returns stabledist parameters (Nolan 1-parameterization).
+#' See examples and the readme.  There's also more context and references in `?stable::dstable`.
 #' 
-#' This is a generic function: methods can be defined for it directly
-#' or via the \code{\link{Summary}} group generic. For this to work properly,
-#' the arguments \code{...} should be unnamed, and dispatch is on the
-#' first argument.
+#' 
+#' [Swihart 2022 update:] See the examples and README for how to make equivalent calls
+#' to those of 'stabledist' (i.e., Nolan's 1-parameterization 
+#' as detailed in Nolan (2020)) using these functions and this package. 
+#' See github for Lambert and Lindsey 1999 JRSS-C journal article, 
+#' which details the parameterization of the Buck (1995) stable distribution which allowed
+#' a Fourier inversion to arrive at a form of the $g_d$ function as detailed in Nolan (2020),
+#' The Buck (1995) parameterization most closely resembles the Zolotarev B parameterization
+#' outlined in Definition 3.6 on page 93 of Nolan (2020) -- except that Buck (1995) did
+#' not allow the scale parameter to multiply with the location parameter.  
+#' This explains why the `Zolotarev B` entry in Table 3.1 on page 97 of Nolan (2020) has
+#' the location parameter being multiplied by the scale parameter whereas in converting the Lindsey and Lambert (1999)
+#' to Nolan 1-parameterization the location parameter stays the same.  
 #'
 #' @name Parameter_Conversion
 #' @aliases sd2s s2sd
@@ -20,9 +30,18 @@
 #' @param disp  the stable 'disp' analogous to 'gamma'
 #' @param loc  the stable 'loc' analogous to 'delta' 
 #' 
-#' @return What you need.  See examples.  
+#' @references Lambert, P. and Lindsey, J.K. (1999) Analysing financial returns using
+#' regression models based on non-symmetric stable distributions. Applied
+#' Statistics, 48, 409-424.
+#' 
+#' @references Nolan, John P. Univariate stable distributions. Berlin/Heidelberg, Germany: Springer, 2020.
+#' 
+#' @return 
+#' \code{sd2s} returns stable parameters as put forth in Lambert and Lindsey (1999) and used in this package.
+#' \code{s2sd} returns stabledist parameters (Nolan 1-parameterization).
 #' @export
 #' @examples
+#' \dontrun{
 #' q <- -1
 #' # nolan pm=1 parameters:
 #' a <-  1.3
@@ -33,7 +52,7 @@
 #' stable::pstable(q, tail = s$tail, skew=s$skew, disp = s$disp, loc  = s$loc)
 #' stabledist::pstable(q, alpha=a, beta=b , gamma=c , delta=d, pm=1)
 #' sd <- s2sd(tail = s$tail, skew=s$skew, disp = s$disp, loc  = s$loc)
-#' stabledist::pstable(q, alpha=sd$alpha, beta=sd$beta , gamma=sd$gamma , delta=sd$delta, pm=1)
+#' stabledist::pstable(q, alpha=sd$alpha, beta=sd$beta , gamma=sd$gamma , delta=sd$delta, pm=1)}
 sd2s <- function(alpha, beta, gamma, delta, pm=1){
   
   if(pm==1){  

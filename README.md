@@ -1,13 +1,13 @@
 
 <!-- README.md is generated from README.Rmd. Please edit README.Rmd -->
-[![Travis-CI Build Status](https://travis-ci.org/swihart/stable.svg?branch=master)](https://travis-ci.org/swihart/stable) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/stable)](https://cran.r-project.org/package=stable) ![downloads](http://cranlogs.r-pkg.org/badges/grand-total/stable)
+[![Travis-CI Build Status](https://travis-ci.org/swihart/stable.svg?branch=master)](https://travis-ci.org/swihart/stable) [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/stable)](https://cran.r-project.org/package=stable) ![downloads](https://cranlogs.r-pkg.org/badges/grand-total/stable)
 
 `stable` R package
 ==================
 
-This package is intended to be the developmental version to the CRAN version of [Jim Lindsey's stable](http://www.commanster.eu/rcode.html). The .zip files listed on his homepage have been listed as version 1.0 since 2005. For the subsequent maintenance on this github and CRAN, we will start at 1.1.
+This package is intended to be the developmental version to the CRAN version of [Jim Lindsey's stable](https://www.commanster.eu/rcode.html). The .zip files listed on his homepage have been listed as version 1.0 since 2005. For the subsequent maintenance on this github and CRAN, we will start at 1.1.
 
-To compare this version with the static v1.0 files on [Jim Lindsey's Homepage](http://www.commanster.eu/rcode.html), it may be useful to use [the compare page for this repo's two branches](https://github.com/swihart/stable/compare/jim-lindsey-homepage-version-1.0...master?diff=split&name=master).
+To compare this version with the static v1.0 files on [Jim Lindsey's Homepage](https://www.commanster.eu/rcode.html), it may be useful to use [the compare page for this repo's two branches](https://github.com/swihart/stable/compare/jim-lindsey-homepage-version-1.0...master?diff=split&name=master).
 
 comparisons with `stabledist` R package
 =======================================
@@ -21,7 +21,26 @@ In brief, the parameters have different names and are transformations for each o
 | gamma      | disp   |
 | delta      | loc    |
 
-If you read the Lindsey PDF in this repo, be aware that location is given the greek letter gamma and scale is given the greek letter delta. The Nolan PDF does the opposite and is used for `stabledist`.
+If you read the Lambert and Lindsey (1999 JRSS-C) PDF in this repo, be aware that location is given the greek letter gamma and scale is given the greek letter delta. The Nolan PDF does the opposite and is used for `stabledist`.
+
+
+[Swihart 2022 update, see references in `?dstable`:] In this README we detail how to make equivalent calls
+ to those of 'stabledist' (i.e., Nolan's 0-parameterization and 1-parameterization 
+ as detailed in Nolan (2020)). 
+ See github for Lambert and Lindsey 1999 JRSS-C journal article, 
+ which details the parameterization of the Buck (1995) stable distribution which allowed
+ a Fourier inversion to arrive at a form of the $g_d$ function as detailed in Nolan (2020),
+ Abdul-Hamid and Nolan (1998) and Nolan (1997).  
+ The Nolan (2020) reference is a textbook that provides
+ an accessible and comprehensive summary of stable distributions in the 25 years or so
+ since this core of this R package was made.  
+ The Buck (1995) parameterization most closely resembles the Zolotarev B parameterization
+ outlined in Definition 3.6 on page 93 of Nolan (2020) -- except that Buck (1995) did
+ not allow the scale parameter to multiply with the location parameter.  
+ This explains why the `Zolotarev B` entry in Table 3.1 on page 97 of Nolan (2020) has
+ the location parameter being multiplied by the scale parameter whereas in converting the Lindsey and Lambert (1999)
+ to Nolan 1-parameterization the location parameter stays the same.  
+
 
 For some values for some distributions things match up nicely, as we see with Normal and Cauchy:
 

@@ -8,20 +8,25 @@
 \alias{hstable}
 \title{Stable Distribution}
 \usage{
-dstable(x, loc = 0, disp = 1/sqrt(2), skew = 0, tail = 2,
-  npt = 501, up = 10, eps = 1e-06, integration = "Romberg")
+dstable(
+  x,
+  loc = 0,
+  disp = 1/sqrt(2),
+  skew = 0,
+  tail = 2,
+  npt = 501,
+  up = 10,
+  eps = 1e-06,
+  integration = "Romberg"
+)
 
-pstable(q, loc = 0, disp = 1/sqrt(2), skew = 0, tail = 2,
-  eps = 1e-06)
+pstable(q, loc = 0, disp = 1/sqrt(2), skew = 0, tail = 2, eps = 1e-06)
 
-qstable(p, loc = 0, disp = 1/sqrt(2), skew = 0, tail = 2,
-  eps = 1e-06)
+qstable(p, loc = 0, disp = 1/sqrt(2), skew = 0, tail = 2, eps = 1e-06)
 
-rstable(n = 1, loc = 0, disp = 1/sqrt(2), skew = 0, tail = 2,
-  eps = 1e-06)
+rstable(n = 1, loc = 0, disp = 1/sqrt(2), skew = 0, tail = 2, eps = 1e-06)
 
-hstable(x, loc = 0, disp = 1/sqrt(2), skew = 0, tail = 2,
-  eps = 1e-06)
+hstable(x, loc = 0, disp = 1/sqrt(2), skew = 0, tail = 2, eps = 1e-06)
 }
 \arguments{
 \item{x, q}{vector of quantiles.}
@@ -97,6 +102,23 @@ with \code{npt} points subdividing \eqn{(O, up)}.
 These three extra arguments -- \code{integration}, \code{up} and
 \code{npt} -- are only available when using \code{dstable}.
 The other functions are all based on Romberg's algorithm.
+
+[Swihart 2022 update:] See the README for how to make equivalent calls
+to those of 'stabledist' (i.e., Nolan's 0-parameterization and 1-parameterization 
+as detailed in Nolan (2020)). 
+See github for Lambert and Lindsey 1999 JRSS-C journal article, 
+which details the parameterization of the Buck (1995) stable distribution which allowed
+a Fourier inversion to arrive at a form of the $g_d$ function as detailed in Nolan (2020),
+Abdul-Hamid and Nolan (1998) and Nolan (1997).  
+The Nolan (2020) reference is a textbook that provides
+an accessible and comprehensive summary of stable distributions in the 25 years or so
+since this core of this R package was made.  
+The Buck (1995) parameterization most closely resembles the Zolotarev B parameterization
+outlined in Definition 3.6 on page 93 of Nolan (2020) -- except that Buck (1995) did
+not allow the scale parameter to multiply with the location parameter.  
+This explains why the `Zolotarev B` entry in Table 3.1 on page 97 of Nolan (2020) has
+the location parameter being multiplied by the scale parameter whereas in converting the Lindsey and Lambert (1999)
+to Nolan 1-parameterization the location parameter stays the same.
 }
 \section{Functions}{
 \itemize{
@@ -139,12 +161,17 @@ plot(x,dstable(x,loc=0,disp=1/sqrt(2),skew=0,tail=0.8),
 lines(x,dstable(x,loc=0,disp=1/sqrt(2),skew=0,tail=1.5))
 lines(x,dstable(x,loc=0,disp=1/sqrt(2),skew=0,tail=2))
 
-stabledist::dstable(x=1, 1, 0)
 }
 \references{
 Lambert, P. and Lindsey, J.K. (1999) Analysing financial returns using
 regression models based on non-symmetric stable distributions. Applied
 Statistics, 48, 409-424.
+
+Nolan, John P. Univariate stable distributions. Berlin/Heidelberg, Germany: Springer, 2020.
+
+Nolan, John P. "Numerical calculation of stable densities and distribution functions." Communications in statistics. Stochastic models 13.4 (1997): 759-774.
+
+Abdul-Hamid, Husein, and John P. Nolan. "Multivariate stable densities as functions of one dimensional projections." Journal of multivariate analysis 67.1 (1998): 80-89.
 }
 \seealso{
 \code{\link[stable]{stablereg}} to fit generalized nonlinear regression models

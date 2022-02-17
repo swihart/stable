@@ -1,8 +1,9 @@
-#' Easy conversion of parameters between stabledist and stable
+#' Easy conversion of parameters between stabledist Nolan 1-parameterization and 0-parameterization
 #'
 #' \code{pm0_to_pm1} has stabledist parameter inputs for pm=0 and returns pm=1 equivalent parameterization.
 #' \code{pm1_to_pm0} has stabledist parameter inputs for pm=1 and returns pm=0 equivalent parameterization.
 #' 
+#' See table Table 3.1 on page 97 of Nolan (2020).
 #'
 #' @name Parameter_Conversion_Nolan_pm1_pm0
 #' @aliases pm1_to_pm0 pm0_to_pm1
@@ -15,10 +16,14 @@
 #' @param c1 the stabledist 'gamma' for pm=1 in 'stabledist'
 #' @param d1 the stabledist 'delta' for pm=1 in 'stabledist'
 #' 
-#' @return What you need.  See examples.  
+#' @references Nolan, John P. Univariate stable distributions. Berlin/Heidelberg, Germany: Springer, 2020.
+#'
+#' @return 
+#' \code{pm0_to_pm1} has stabledist parameter inputs for pm=0 and returns pm=1 equivalent parameterization.
+#' \code{pm1_to_pm0} has stabledist parameter inputs for pm=1 and returns pm=0 equivalent parameterization.
 #' @export
 #' @examples
-#' q <- -1
+#' \dontrun{q <- -1
 #' # nolan pm=1 parameters:
 #' a1 <-  1.3
 #' b1 <-  -0.4
@@ -42,7 +47,7 @@
 #' # only change delta=d0 for pm=0
 #' stabledist::dstable(q, alpha=a1, beta=b1 , gamma=c1 , delta=d0, pm=0)
 #' stabledist::dstable(q, alpha=a0, beta=b0 , gamma=c0 , delta=d0, pm=0)
-#' #> [1] 0.0572133
+#' #> [1] 0.0572133}
 pm0_to_pm1 <- function(a0, b0, c0, d0){
   
   if(a0!=1){  
@@ -51,7 +56,7 @@ pm0_to_pm1 <- function(a0, b0, c0, d0){
     c1 <- c1
     d1 <- d0 - b1*c1*tan(pi*a1/2)
       }
-  
+
   return(list(a1=a1, b1=b1, c1=c1, d1=d1 ))
   
 }
@@ -65,7 +70,7 @@ pm1_to_pm0 <- function(a1, b1, c1, d1){
     c0 <- c1
     d0 <- d1 + b1*c1*tan(pi*a1/2)
       }
-  
+
   return(list(a0=a0, b0=b0, c0=c0, d0=d0))
   
 }
