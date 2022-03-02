@@ -1,5 +1,5 @@
 Package: stable
-Version: 1.1.5
+Version: 1.1.6
 Title: Probability Functions and Generalized Regression Models for Stable
     Distributions
 Authors@R: c(
@@ -13,10 +13,12 @@ Depends:
 Description: Density, distribution, quantile and hazard functions of a
     stable variate; generalized regression models for the parameters
     of a stable distribution. See the README for how to make equivalent calls
-    to those of 'stabledist'. See github for Lambert and Lindsey 1999 JRSS-C journal article, 
-    which details the parameterization of the Buck (1995) stable distribution which allowed
-    a Fourier inversion to arrive at a form of the $g_d$ function as detailed in Nolan (2020).  
-    See the Details section of the `?dstable` help file for context and references.
+    to those of 'stabledist' (i.e., Nolan's 0-parameterization and 
+    1-parameterization as detailed in Nolan (2020)). 
+    See github for Lambert and Lindsey 1999 JRSS-C journal article, 
+    which details the parameterization of the Buck (1995) stable.   
+    See the Details section of the `?dstable` help file for context and 
+    references.
 License: GPL (>= 2)
 URL: https://www.commanster.eu/rcode.html
 BugReports: https://github.com/swihart/stable/issues

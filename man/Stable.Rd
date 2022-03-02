@@ -51,7 +51,10 @@ hstable(x, loc = 0, disp = 1/sqrt(2), skew = 0, tail = 2, eps = 1e-06)
 These functions provide information about the stable distribution
 with the location, the dispersion, the skewness and the tail thickness
 respectively modelled by the parameters \code{loc}, \code{disp},
-\code{skew} and  \code{tail}.
+\code{skew} and  \code{tail}. These differ from those of 'stabledist' (i.e., Nolan's 0-parameterization and 
+1-parameterization as detailed in Nolan (2020)). See the README for how to make equivalent calls
+to those of 'stabledist' (i.e., Nolan's 0-parameterization and 
+1-parameterization as detailed in Nolan (2020)).
 }
 \details{
 \code{dstable}, \code{pstable}, \code{qstable} and \code{hstable}
@@ -103,22 +106,39 @@ These three extra arguments -- \code{integration}, \code{up} and
 \code{npt} -- are only available when using \code{dstable}.
 The other functions are all based on Romberg's algorithm.
 
-[Swihart 2022 update:] See the README for how to make equivalent calls
+[Swihart 2022 update:] 
+
+
+See the README for how to make equivalent calls
 to those of 'stabledist' (i.e., Nolan's 0-parameterization and 1-parameterization 
 as detailed in Nolan (2020)). 
 See github for Lambert and Lindsey 1999 JRSS-C journal article, 
 which details the parameterization of the Buck (1995) stable distribution which allowed
-a Fourier inversion to arrive at a form of the $g_d$ function as detailed in Nolan (2020),
+a Fourier inversion to arrive at a form similar to but not exactly the $g_d$ 
+function as detailed in Nolan (2020),
 Abdul-Hamid and Nolan (1998) and Nolan (1997).  
 The Nolan (2020) reference is a textbook that provides
 an accessible and comprehensive summary of stable distributions in the 25 years or so
-since this core of this R package was made.  
+since the core of this R package was made and put on CRAN.  
 The Buck (1995) parameterization most closely resembles the Zolotarev B parameterization
 outlined in Definition 3.6 on page 93 of Nolan (2020) -- except that Buck (1995) did
 not allow the scale parameter to multiply with the location parameter.  
 This explains why the `Zolotarev B` entry in Table 3.1 on page 97 of Nolan (2020) has
 the location parameter being multiplied by the scale parameter whereas in converting the Lindsey and Lambert (1999)
-to Nolan 1-parameterization the location parameter stays the same.
+to Nolan 1-parameterization the location parameter stays the same.  
+
+To be clear, \code{stable::dstable} and \code{stable::pstable} are evaluated 
+by numerically integrating the inverse Fourier transform.  The code works 
+reasonably for small and moderate values of x, but will have numerical issues 
+in some cases (such as values from \code{stable::pstable} being greater than 
+1 or or not being monotonic).  The arguments \code{npt}, \code{up}, 
+\code{integration}, and \code{eps} can be adjusted 
+to improve accuracy at the cost of speed, but will still have limitations.
+Functions that better handle these problems are available in other packages
+(such as \code{stabledist} and \code{stable}) that use an alternative method
+(as detailed in Nolan 1997)  
+distinct from directly numerically integrating the Fourier inverse transform. 
+See last example in the README.
 }
 \section{Functions}{
 \itemize{
@@ -175,7 +195,8 @@ Abdul-Hamid, Husein, and John P. Nolan. "Multivariate stable densities as functi
 }
 \seealso{
 \code{\link[stable]{stablereg}} to fit generalized nonlinear regression models
-for the stable distribution parameters.
+for the stable distribution parameters. 
+R packages \code{stabledist} and \code{libstableR} provide [dpqr] functions.
 }
 \author{
 Philippe Lambert (Catholic University of Louvain, Belgium, \email{phlambert@stat.ucl.ac.be})

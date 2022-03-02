@@ -23,23 +23,37 @@ In brief, the parameters have different names and are transformations for each o
 
 If you read the Lambert and Lindsey (1999 JRSS-C) PDF in this repo, be aware that location is given the greek letter gamma and scale is given the greek letter delta. The Nolan PDF does the opposite and is used for `stabledist`.
 
-
 [Swihart 2022 update, see references in `?dstable`:] In this README we detail how to make equivalent calls
  to those of 'stabledist' (i.e., Nolan's 0-parameterization and 1-parameterization 
  as detailed in Nolan (2020)). 
  See github for Lambert and Lindsey 1999 JRSS-C journal article, 
  which details the parameterization of the Buck (1995) stable distribution which allowed
- a Fourier inversion to arrive at a form of the $g_d$ function as detailed in Nolan (2020),
+ a Fourier inversion to arrive at a form similar to but not exactly the $g_d$ 
+ function as detailed in Nolan (2020),
  Abdul-Hamid and Nolan (1998) and Nolan (1997).  
  The Nolan (2020) reference is a textbook that provides
  an accessible and comprehensive summary of stable distributions in the 25 years or so
- since this core of this R package was made.  
+ since the core of this R package was made and put on CRAN.  
  The Buck (1995) parameterization most closely resembles the Zolotarev B parameterization
  outlined in Definition 3.6 on page 93 of Nolan (2020) -- except that Buck (1995) did
  not allow the scale parameter to multiply with the location parameter.  
  This explains why the `Zolotarev B` entry in Table 3.1 on page 97 of Nolan (2020) has
  the location parameter being multiplied by the scale parameter whereas in converting the Lindsey and Lambert (1999)
  to Nolan 1-parameterization the location parameter stays the same.  
+
+ To be clear, \code{stable::dstable} and \code{stable::pstable} are evaluated 
+ by numerically integrating the inverse Fourier transform.  The code works 
+ reasonably for small and moderate values of x, but will have numerical issues 
+ in some cases large x(such as values from \code{stable::pstable} being greater than 
+ 1 or or not being monotonic).  The arguments \code{npt}, \code{up}, 
+ \code{integration}, and \code{eps} can be adjusted 
+ to improve accuracy at the cost of speed, but will still have limitations.
+ Functions that avoid these problems are available in other packages
+ (such as \code{stabledist} and \code{stable})  that use an alternative method
+(as detailed in Nolan 1997)  
+distinct from directly numerically integrating the Fourier inverse transform. 
+See last example in this README.
+ 
 
 
 For some values for some distributions things match up nicely, as we see with Normal and Cauchy:
@@ -343,4 +357,24 @@ ys <- stable::dstable(xran, tail = s$tail, skew=s$skew, disp = s$disp, loc  = s$
 
 xran[ys == max(ys)]
 #> [1] -1.133
+```
+
+possible numerical issues for large x
+-----------------------------
+
+``` r
+
+param_conv <- stable::s2sd(1.5, 0.5, 1/sqrt(2), 0)
+param_conv
+head(stable::dstable(q, tail =1.5, skew=0.5, disp =1/sqrt(2), loc  = 0))
+head(stabledist::dstable(q, alpha=param_conv$alpha, beta=param_conv$beta , gamma=param_conv$gamma , delta=param_conv$delta, pm=1))
+
+plot(q,stable::dstable(q, tail =1.5, skew=0.5, disp =1/sqrt(2), loc  = 0), type="s")
+plot(q,stabledist::dstable(q, alpha=param_conv$alpha, beta=param_conv$beta , gamma=param_conv$gamma , delta=param_conv$delta, pm=1), type="s")
+
+param_conv <- stable::s2sd(1.5, 0.5, 1/sqrt(2), 0)
+param_conv
+plot(q,stable::pstable(q, tail =1.5, skew=0.5, disp =1/sqrt(2), loc  = 0), type="s")
+plot(q,stabledist::pstable(q, alpha=param_conv$alpha, beta=param_conv$beta , gamma=param_conv$gamma , delta=param_conv$delta, pm=1), type="s")
+
 ```

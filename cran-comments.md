@@ -1,5 +1,31 @@
 # stable R package
 Bruce Swihart  
+Mar 2022
+
+## Submission 1
+
+  * refined the previous version's references to contemporary stable distribution 
+  literature to help contextualize this package in the /man files and README
+
+
+## Test environments
+Local OS X: R version 4.1.2 (2021-11-01)
+  * Platform: x86_64-apple-darwin17.0 (64-bit)
+  * Running under: macOS Mojave 10.14.6
+  
+rhub::check(platform = "debian-clang-devel"): Debian Linux, R-devel, clang, ISO-8859-15 locale
+rhub::check(platform = "windows-x86_64-devel"): Windows Server 2022, R-devel, 64 bit
+
+
+## R CMD check results
+There were no ERRORs or WARNINGs or NOTEs.
+
+
+## Downstream dependencies
+There are currently no downstream dependencies for this package.
+
+# stable R package
+Bruce Swihart  
 Feb 2022
 
 ## Submission 1

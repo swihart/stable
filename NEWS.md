@@ -1,4 +1,12 @@
 #------------------------------------------------------------------------------
+#version 1.1.6
+#------------------------------------------------------------------------------
+
+  * refined the previous version's references to contemporary stable distribution 
+  literature to help contextualize this package in the /man files and README
+  * add example to bottom of README
+
+#------------------------------------------------------------------------------
 #version 1.1.5
 #------------------------------------------------------------------------------
 
