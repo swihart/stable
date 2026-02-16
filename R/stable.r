@@ -100,6 +100,8 @@
 #' @param tail vector of parameters (in [0,2]) related to the tail thickness.
 #' @param eps scalar giving the required precision in computation.
 #' @param npt,up,integration As detailed herein -- only available when using \code{dstable}.
+#' @param object the object of the default generic
+#' @param ... the usual R definition
 #'
 #' @references Lambert, P. and Lindsey, J.K. (1999) Analysing financial returns using
 #' regression models based on non-symmetric stable distributions. Applied
@@ -419,7 +421,7 @@ tail_h <- function(x) 2/(1+exp(-x))
 #' explanatory variables.
 #'
 #'
-#' @aliases stablereg fitted.stable df.residual.stable deviance.stable
+#' @aliases stablereg df.residual.stable deviance.stable
 #' aic.stable
 #' @param y The response vector or a \code{repeated} data object. If the
 #' \code{repeated} data object contains more than one response variable, give
@@ -1276,17 +1278,34 @@ z1}
 ###########################################################################
 # Stable class functions
 #
-fitted.stable <- function(z) z$loc
 
-df.residual.stable <- function(z) z$df
+#
+# This function produces the stable density computed at y.
+# Note that it is obtained by integrating a function from 0 to Infinity.
+# This integral is approximated by the finite integral from 0 to UP
+# using the Simpson's method with npt points or Romberg's integration
+#' @describeIn stable support functions
+#' @export
+fitted.stable <- function(object, ...) object$loc
+#' @export
+df.residual.stable <- function(object, ...) object$df
+
+# foo <- function(object, ...) UseMethod("foo")
+# foo.default <- function(object, ...) base::foo(object)
+# 
 
 aic <- function (object, ...)
 	UseMethod("aic")
-aic.stable <- function(z) z$aic
 
-deviance.stable <- function(z) 2*z$llik
+#' @export
+aic.stable <- function(object, ...) object$aic
 
-print.stable <- function(z,digits=max(4,.Options$digits-3),correlation=TRUE) {
+#' @export
+deviance.stable <- function(object, ...) 2*object$llik
+
+#' @export
+print.stable <- function(x,digits=max(4,.Options$digits-3),correlation=TRUE, ...) {
+  z <- x
 np <- z$npar.opt
 if(!z$oloc)nploc <- 0
 if(!z$odisp)npdisp <- 0

@@ -2,7 +2,6 @@
 % Please edit documentation in R/stable.r
 \name{stablereg}
 \alias{stablereg}
-\alias{fitted.stable}
 \alias{df.residual.stable}
 \alias{deviance.stable}
 \alias{aic.stable}

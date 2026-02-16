@@ -6,6 +6,7 @@
 \alias{qstable}
 \alias{rstable}
 \alias{hstable}
+\alias{fitted.stable}
 \title{Stable Distribution}
 \usage{
 dstable(
@@ -27,6 +28,8 @@ qstable(p, loc = 0, disp = 1/sqrt(2), skew = 0, tail = 2, eps = 1e-06)
 rstable(n = 1, loc = 0, disp = 1/sqrt(2), skew = 0, tail = 2, eps = 1e-06)
 
 hstable(x, loc = 0, disp = 1/sqrt(2), skew = 0, tail = 2, eps = 1e-06)
+
+\method{fitted}{stable}(object, ...)
 }
 \arguments{
 \item{x, q}{vector of quantiles.}
@@ -46,6 +49,10 @@ hstable(x, loc = 0, disp = 1/sqrt(2), skew = 0, tail = 2, eps = 1e-06)
 \item{p}{vector of probabilites.}
 
 \item{n}{number of observations.}
+
+\item{object}{the object of the default generic}
+
+\item{...}{the usual R definition}
 }
 \description{
 These functions provide information about the stable distribution
@@ -130,7 +137,7 @@ to Nolan 1-parameterization the location parameter stays the same.
 To be clear, \code{stable::dstable} and \code{stable::pstable} are evaluated 
 by numerically integrating the inverse Fourier transform.  The code works 
 reasonably for small and moderate values of x, but will have numerical issues 
-in some cases (such as values from \code{stable::pstable} being greater than 
+in some cases of large x (such as values from \code{stable::pstable} being greater than 
 1 or or not being monotonic).  The arguments \code{npt}, \code{up}, 
 \code{integration}, and \code{eps} can be adjusted 
 to improve accuracy at the cost of speed, but will still have limitations.
@@ -140,19 +147,24 @@ Functions that better handle these problems are available in other packages
 distinct from directly numerically integrating the Fourier inverse transform. 
 See last example in the README.
 }
+\section{Methods (by generic)}{
+\itemize{
+\item \code{fitted(stable)}: support functions
+
+}}
 \section{Functions}{
 \itemize{
-\item \code{dstable}: density
+\item \code{dstable()}: density
 
-\item \code{pstable}: cdf
+\item \code{pstable()}: cdf
 
-\item \code{qstable}: quantiles
+\item \code{qstable()}: quantiles
 
-\item \code{rstable}: random deviates
+\item \code{rstable()}: random deviates
 
-\item \code{hstable}: hazard
+\item \code{hstable()}: hazard
+
 }}
-
 \examples{
 par(mfrow=c(2,2))
 x <- seq(-5,5,by=0.1)
